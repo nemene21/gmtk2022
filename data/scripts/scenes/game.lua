@@ -4,6 +4,8 @@ function gameReload()
     die = {newDice(400, 300)}
 
     diceTaken = nil
+
+    lastDiceTakenPos = nil
     
 end
 
@@ -61,10 +63,13 @@ function game()
 
         diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, -64, dt * 10)
 
+        lastDiceTakenPos = diceTaken.pos
+
         diceTaken.pos.x = lerp(diceTaken.pos.x, xM, dt * 20)
         diceTaken.pos.y = lerp(diceTaken.pos.y, yM, dt * 20)
 
-        diceTaken.vel = newVec(lxM - xM, lyM - yM)
+        diceTaken.vel.x = diceTaken.vel.x + diceTaken.pos.x - lastDiceTakenPos.x
+        diceTaken.vel.y = diceTaken.vel.y + diceTaken.pos.y - lastDiceTakenPos.y
 
     end
 

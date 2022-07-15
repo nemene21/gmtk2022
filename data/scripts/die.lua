@@ -1,4 +1,7 @@
 
+DICE_IMAGE = newSpritesheet("data/graphics/images/dicesheet.png", 14, 14)
+DICE_GRAVITY = 1200
+
 function newDice(x, y)
 
     return {
@@ -12,13 +15,13 @@ function newDice(x, y)
         process = processDice,
         draw = drawDice,
 
-        held = false
+        held = false,
+
+        number = love.math.random(1, 6)
 
     }
 
 end
-
-DICE_GRAVITY = 1200
 
 function processDice(dice)
 
@@ -34,7 +37,7 @@ function processDice(dice)
 
         dice.fakeVertical = -1
 
-        if dice.verticalVel < 75 then dice.verticalVel = 0 end
+        if dice.verticalVel < 80 then dice.verticalVel = 0 end -- Stop when too low
 
         dice.verticalVel = dice.verticalVel * - 0.8
 
@@ -48,6 +51,6 @@ function drawDice(dice)
     love.graphics.circle("fill", dice.pos.x, dice.pos.y, 24)
 
     setColor(255, 255, 255)
-    love.graphics.circle("fill", dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 24)
+    drawFrame(DICE_IMAGE, dice.number - 1, 0, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical))
 
 end
