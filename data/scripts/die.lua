@@ -4,9 +4,13 @@ function newDice(x, y)
     return {
 
         pos = newVec(x, y),
+        vel = newVec(0, 0),
 
         fakeVertical = 0,
         verticalVel  = 0,
+
+        process = processDice,
+        draw = drawDice,
 
         held = false
 
@@ -14,22 +18,23 @@ function newDice(x, y)
 
 end
 
-DICE_GRAVITY = 300
+DICE_GRAVITY = 800
 
 function processDice(dice)
 
+    -- Move
     dice.pos.x = dice.pos.x + dice.vel.x * dt
     dice.pos.y = dice.pos.y + dice.vel.y * dt
 
-    dice.verticalVel = dice.verticalVel - DICE_GRAVITY * dt * boolToInt(dice.held)
+    dice.verticalVel = dice.verticalVel + DICE_GRAVITY * dt * boolToInt(not dice.held)
 
     dice.fakeVertical = dice.fakeVertical + dice.verticalVel * dt
 
-    if dice.fakeVertical < 0 then
+    if dice.fakeVertical > 0 then -- Bounce
 
-        dice.fakeVertical = 0
+        dice.fakeVertical = -1
 
-        dice.verticalVel = dice.verticalVel * - 0.5
+        dice.verticalVel = dice.verticalVel * - 0.25
 
     end
 

@@ -19,7 +19,7 @@ function game()
     clear(155, 155, 155)
 
     local kill = {}
-    for id, dice in iapirs(die) do -- Process die
+    for id, dice in ipairs(die) do -- Process die
 
         dice:process()
 
@@ -30,7 +30,7 @@ function game()
 
         local bestLen = 99999
 
-        for id, dice in iapirs(die) do -- Find closest dice
+        for id, dice in ipairs(die) do -- Find closest dice
 
             local diff = newVec(xM - dice.pos.x, yM - dice.pos.y)
 
@@ -39,24 +39,29 @@ function game()
                 bestLen = diff:getLen()
 
                 diceTaken = dice
+                diceTaken.held = true
 
             end
 
         end
 
-        if bestLen > 48 then diceTaken = nil end -- Set dice to nil if its too far
+        if bestLen > 48 then diceTaken = nil; diceTaken.held = false end -- Set dice to nil if its too far
 
     end
 
-    if not mousePressed(1) then diceTaken = nil end -- Reset grabbing if the dice is no longer held
+    if not mousePressed(1) and diceTaken ~= nil then -- Reset grabbing if the dice is no longer held
+
+        diceTaken.held = false
+
+    end
 
     if diceTaken ~= nil then
 
-        diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, 48)
+        diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, -64, dt * 10 )
 
     end
 
-    for id, dice in iapirs(die) do -- Draw die
+    for id, dice in ipairs(die) do -- Draw die
 
         dice:draw()
 
