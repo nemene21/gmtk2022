@@ -18,7 +18,7 @@ function newDice(x, y)
 
 end
 
-DICE_GRAVITY = 800
+DICE_GRAVITY = 1200
 
 function processDice(dice)
 
@@ -34,7 +34,9 @@ function processDice(dice)
 
         dice.fakeVertical = -1
 
-        dice.verticalVel = dice.verticalVel * - 0.25
+        if dice.verticalVel < 75 then dice.verticalVel = 0 end
+
+        dice.verticalVel = dice.verticalVel * - 0.8
 
     end
 
@@ -46,6 +48,6 @@ function drawDice(dice)
     love.graphics.circle("fill", dice.pos.x, dice.pos.y, 24)
 
     setColor(255, 255, 255)
-    love.graphics.circle("fill", dice.pos.x, dice.pos.y + dice.fakeVertical, 24)
+    love.graphics.circle("fill", dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 24)
 
 end

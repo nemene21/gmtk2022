@@ -45,7 +45,7 @@ function game()
 
         end
 
-        if bestLen > 48 then diceTaken = nil; diceTaken.held = false end -- Set dice to nil if its too far
+        if bestLen > 48 then diceTaken.held = false; diceTaken = nil end -- Set dice to nil if its too far
 
     end
 
@@ -53,11 +53,18 @@ function game()
 
         diceTaken.held = false
 
+        diceTaken = nil
+
     end
 
     if diceTaken ~= nil then
 
-        diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, -64, dt * 10 )
+        diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, -64, dt * 10)
+
+        diceTaken.pos.x = lerp(diceTaken.pos.x, xM, dt * 20)
+        diceTaken.pos.y = lerp(diceTaken.pos.y, yM, dt * 20)
+
+        diceTaken.vel = newVec(lxM - xM, lyM - yM)
 
     end
 

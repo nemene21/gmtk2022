@@ -46,6 +46,8 @@ function love.draw()
     globalTimer = globalTimer + dt
     
     -- Mouse pos
+
+    lxM, lyM = xM, yM
     xM, yM = love.mouse.getPosition()
 
     w, h = love.graphics.getDimensions()
