@@ -1,6 +1,10 @@
 
 DICE_IMAGE = newSpritesheet("data/graphics/images/dicesheet.png", 16, 16)
+DICE_SHADOW_IMAGE = love.graphics.newImage("data/graphics/images/diceShadow.png")
 DICE_GRAVITY = 1200
+
+DICE_BOUNCE_PARTICLES = loadJson("data/graphics/particles/diceBounce.json")
+DICE_THROW_PARTICLES  =  loadJson("data/graphics/particles/throwDice.json")
 
 function newDice(x, y)
 
@@ -18,13 +22,19 @@ function newDice(x, y)
         held = false,
         validForPoints = false,
 
-        number = love.math.random(1, 6)
+        number = love.math.random(1, 6),
+
+        bounceAnim = 0
 
     }
 
 end
 
 function processDice(dice)
+
+    -- Animation
+
+    dice.bounceAnim = lerp(dice.bounceAnim, 0, dt * 14)
 
     -- Move
     dice.vel.x = lerp(dice.vel.x, 0, dt * boolToInt(not dice.held) * 5)
@@ -44,7 +54,24 @@ function processDice(dice)
         if dice.verticalVel < 80 then -- Stop when too low
             
             dice.verticalVel = 0
-            
+        
+        end
+
+        if dice.verticalVel > 160 then
+
+            dice.number = love.math.random(1, 6)
+
+            local particles = newParticleSystem(dice.pos.x, dice.pos.y, deepcopyTable(DICE_BOUNCE_PARTICLES))
+
+            particles.rotation = love.math.random(0, 360)
+
+            table.insert(particleSystems, particles)
+
+            dice.bounceAnim = 0.6
+
+            shake(2, 2, 0.1)
+        else
+
             if dice.validForPoints then
 
                 dice.validForPoints = false
@@ -54,12 +81,6 @@ function processDice(dice)
                 addNewText("+"..tostring(dice.number), dice.pos.x, dice.pos.y - 12, {0, 255, 155})
 
             end
-        
-        end
-
-        if dice.verticalVel > 160 then
-
-            dice.number = love.math.random(1, 6)
 
         end
 
@@ -71,10 +92,8 @@ end
 
 function drawDice(dice)
 
-    setColor(0, 0, 0, 100)
-    love.graphics.circle("fill", dice.pos.x, dice.pos.y + 8, 24)
+    drawShadow(DICE_SHADOW_IMAGE, dice.pos.x, dice.pos.y, 1 - dice.bounceAnim, 1 + dice.bounceAnim)
 
-    setColor(255, 255, 255)
-    drawFrame(DICE_IMAGE, (6 - dice.number) + 1, 1, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical))
+    drawFrame(DICE_IMAGE, (6 - dice.number) + 1, 1, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
 
 end

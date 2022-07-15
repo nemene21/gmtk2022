@@ -137,7 +137,7 @@ function processParticleSystem(particleSystem)
 
         particlesGoingToSpawn = love.math.random(particleSystem.amount.a,particleSystem.amount.b)
 
-        for i=0,particlesGoingToSpawn do
+        for i=1,particlesGoingToSpawn do
             
             -- Make pos
             local data = SPAWNS[particleSystem.spawnShape.mode](particleSystem.x,particleSystem.y,particleSystem.spawnShape.data,particleSystem,particlesGoingToSpawn,i)

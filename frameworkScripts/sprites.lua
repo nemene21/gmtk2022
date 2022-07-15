@@ -33,3 +33,35 @@ function drawSprite(tex,x,y,sx,sy,r)
     local sx = sx or 1; local sy = sy or 1; local r = r or 0
     love.graphics.draw(tex,x-camera[1],y-camera[2],r,SPRSCL*sx,SPRSCL*sy,tex:getWidth()*0.5,tex:getHeight()*0.5)
 end
+
+-- Shadows
+SHADOWS = {}
+
+function drawShadow(tex,x,y,sx,sy,r)
+
+    table.insert(SHADOWS, {
+
+        texture = tex, x = x, y = y, scaleX = sx, scaleY = sy, rotation = r
+
+    })
+
+end
+
+function drawAllShadows()
+
+    love.graphics.setCanvas(shadowSurface)
+    clear(255, 255, 255)
+
+    for id, shadow in ipairs(SHADOWS) do
+
+        setColor(0, 0, 0)
+        drawSprite(shadow.texture, shadow.x - 6, shadow.y + 6, shadow.scaleX, shadow.scaleY, shadow.rotation)
+
+    end
+
+    SHADOWS = {}
+
+    setColor(255, 255, 255)
+    love.graphics.setCanvas(display)
+
+end
