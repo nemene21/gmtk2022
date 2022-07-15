@@ -8,6 +8,9 @@ function gameReload()
     lastDiceTakenPos = nil
 
     money = 0
+
+    diceTakenWay  = 0
+    diceTakenTime = 0
     
 end
 
@@ -32,6 +35,9 @@ function game()
     -- Die grabbing
     if mouseJustPressed(1) then
 
+        diceTakenWay  = 0
+        diceTakenTime = 0
+
         local bestLen = 99999
 
         for id, dice in ipairs(die) do -- Find closest dice
@@ -49,13 +55,22 @@ function game()
 
         end
 
-        if bestLen > 48 then diceTaken.held = false; diceTaken = nil end -- Set dice to nil if its too far
+        if bestLen > 48 then diceTaken.held = false; diceTaken = nil else 
+
+            diceTaken.vel = newVec(0, 0)
+
+            diceTaken.validForPoints = true
+
+        end
 
     end
 
     if not mousePressed(1) and diceTaken ~= nil then -- Reset grabbing if the dice is no longer held
 
         diceTaken.held = false
+
+        diceTaken.vel.x = (diceTaken.pos.x - lastDiceTakenPos.x) / dt
+        diceTaken.vel.y = (diceTaken.pos.y - lastDiceTakenPos.y) / dt
 
         diceTaken = nil
 
@@ -65,13 +80,10 @@ function game()
 
         diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, -64, dt * 10)
 
-        lastDiceTakenPos = diceTaken.pos
+        lastDiceTakenPos = newVec(diceTaken.pos.x, diceTaken.pos.y)
 
-        diceTaken.pos.x = lerp(diceTaken.pos.x, xM, dt * 20)
-        diceTaken.pos.y = lerp(diceTaken.pos.y, yM, dt * 20)
-
-        diceTaken.vel.x = diceTaken.vel.x + diceTaken.pos.x - lastDiceTakenPos.x
-        diceTaken.vel.y = diceTaken.vel.y + diceTaken.pos.y - lastDiceTakenPos.y
+        diceTaken.pos.x = xM
+        diceTaken.pos.y = yM
 
     end
 
@@ -80,6 +92,8 @@ function game()
         dice:draw()
 
     end
+
+    processTextParticles()
 
     -- Return scene
     return sceneAt

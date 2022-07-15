@@ -14,6 +14,7 @@ require "frameworkScripts.tiles"
 require "frameworkScripts.timer"
 require "frameworkScripts.camera"
 require "frameworkScripts.audio"
+require "frameworkScripts.text"
 
 -- Project Specific Modules
 require "data.scripts.die"

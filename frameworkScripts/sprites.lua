@@ -22,7 +22,9 @@ end
 
 function drawFrame(spritesheet,X,Y,x,y,sx,sy,r)
     local sx = sx or 1; local sy = sy or 1; local r = r or 0
-    love.graphics.draw(spritesheet.texture,spritesheet[tostring(X)..","..tostring(Y)],x-camera[1],y-camera[2],r,SPRSCL*sx,SPRSCL*sy)
+    local quad = spritesheet[tostring(X)..","..tostring(Y)]
+    qx, qy, qw, qh = quad:getViewport()
+    love.graphics.draw(spritesheet.texture,quad,x-camera[1],y-camera[2],r,SPRSCL*sx,SPRSCL*sy,qw * 0.5, qh * 0.5)
 end
 
 -- Sprites
