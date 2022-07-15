@@ -16,7 +16,7 @@ require "frameworkScripts.camera"
 require "frameworkScripts.audio"
 
 -- Project Specific Modules
-
+require "data.scripts.die"
 
 -- Scenes
 require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"
