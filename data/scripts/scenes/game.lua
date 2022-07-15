@@ -6,6 +6,8 @@ function gameReload()
     diceTaken = nil
 
     lastDiceTakenPos = nil
+
+    money = 0
     
 end
 
