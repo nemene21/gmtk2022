@@ -29,9 +29,9 @@ end
 
 -- Sprites
 
-function drawSprite(tex,x,y,sx,sy,r)
+function drawSprite(tex,x,y,sx,sy,r,cx,cy)
     local sx = sx or 1; local sy = sy or 1; local r = r or 0
-    love.graphics.draw(tex,x-camera[1],y-camera[2],r,SPRSCL*sx,SPRSCL*sy,tex:getWidth()*0.5,tex:getHeight()*0.5)
+    love.graphics.draw(tex,x-camera[1],y-camera[2],r,SPRSCL*sx,SPRSCL*sy,tex:getWidth()*(cx or 0.5),tex:getHeight()*(cy or 0.5))
 end
 
 -- Shadows

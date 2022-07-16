@@ -62,6 +62,20 @@ end
 
 function game()
 
+    if #fires > 0 then
+
+        if not FIRE_SOUND:isPlaying() then
+
+            FIRE_SOUND:play()
+
+        end
+        
+    else
+
+        FIRE_SOUND:stop()
+
+    end
+
     -- Reset
     sceneAt = "game"
     
@@ -95,6 +109,9 @@ function game()
         if event == "laser" then
 
             table.insert(lasers, newLaser())
+            table.insert(lasers, newLaser(-96))
+
+            playSound("laser")
 
         end
 
@@ -226,8 +243,8 @@ function game()
 
         lastitemTakenPos = newVec(itemTaken.pos.x, itemTaken.pos.y)
 
-        itemTaken.pos.x = xM
-        itemTaken.pos.y = yM
+        itemTaken.pos.x = lerp(itemTaken.pos.x, xM, dt * 50)
+        itemTaken.pos.y = lerp(itemTaken.pos.y, yM, dt * 50)
 
     end
 
@@ -274,6 +291,8 @@ function game()
         
         shake(8, 2, 0.15)
 
+        playSound("earthquake", love.math.random(90, 110) * 0.01)
+
         earthquakeTimer = 1
 
         earthquakeShakes = earthquakeShakes - 1
@@ -304,7 +323,17 @@ function game()
     processTextParticles()
     drawAllShadows()
 
-    if justPressed("space") then shopOpen = not shopOpen end
+    if justPressed("space") then
+        
+        shopOpen = not shopOpen
+    
+        if shopOpen then playTrack("shop", 0.5) end
+        if not shopOpen then playTrack("gameplay", 0.5) end
+
+        print(TRACK_PLAYING)
+        print(NEW_TRACK)
+    
+    end
 
     if shopOpen then
 

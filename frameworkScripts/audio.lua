@@ -13,13 +13,21 @@ waterBalloonDie = love.audio.newSource("data/sounds/SFX/waterBalloonDie.wav", "s
 
 buy = love.audio.newSource("data/sounds/SFX/buy.wav", "stream"),
 
-diceDie = love.audio.newSource("data/sounds/SFX/diceDie.wav", "stream")
+diceDie = love.audio.newSource("data/sounds/SFX/diceDie.wav", "stream"),
+
+laser = love.audio.newSource("data/sounds/SFX/laser.wav", "stream"),
+
+earthquake = love.audio.newSource("data/sounds/SFX/laser.wav", "stream")
 
 }
 
+FIRE_SOUND = love.audio.newSource("data/sounds/SFX/fire.wav", "stream")
+
 MUSIC = {
 
-gameplay = love.audio.newSource("data/sounds/music/gameplay.wav", "stream")
+gameplay = love.audio.newSource("data/sounds/music/gameplay.wav", "stream"),
+
+shop = love.audio.newSource("data/sounds/music/shop.wav", "stream")
 
 }
 
@@ -41,7 +49,7 @@ trackTransitionMax = 0
 
 function playTrack(track, transition)
 
-    if track ~= NEW_TRACK and track ~= TRACK_PLAYING then
+    if track ~= TRACK_PLAYING then
         NEW_TRACK = track
 
         trackTransition = transition or 0
