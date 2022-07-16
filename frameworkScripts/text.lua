@@ -8,7 +8,7 @@ function outlinedText(x,y,w,text,color, scaleX, scaleY, cX, cY)
 
     local color = color or {255,255,255}
     local scaleX = scaleX or 1; local scaleY = scaleY or 1
-    local cX = cX or 0; local cY = cY or 0
+    local cX = cX or 0.5; local cY = cY or 0.5
 
     local width = FONT:getWidth(text) * cX
     local height = FONT:getHeight(text) * cY

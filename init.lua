@@ -18,6 +18,7 @@ require "frameworkScripts.text"
 
 -- Project Specific Modules
 require "data.scripts.die"
+require "data.scripts.waterBalloons"
 
 -- Scenes
 require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"

@@ -26,7 +26,7 @@ vec4 effect( vec4 color, Image image, vec2 uvs, vec2 screen_coords )
 
     blur /= iterations;
 
-    blur.a = 0.5;
+    blur.a = 0.5 * int(Texel(image, uvs).r != 1);
 
     return blur;
 }

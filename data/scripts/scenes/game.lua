@@ -1,21 +1,27 @@
 
 function gameReload()
 
-    die = {newDice(400, 300)}
+    items = {newDice(400, 300), newWaterBalloon(400, 300)}
 
-    diceTaken = nil
+    itemTaken = nil
 
-    lastDiceTakenPos = nil
+    lastItemTakenPos = nil
 
     money = 0
 
-    diceTakenWay  = 0
-    diceTakenTime = 0
+    itemTakenWay  = 0
+    itemTakenTime = 0
 
     shadowSurface = love.graphics.newCanvas(800, 600)
     shadows = {}
 
     particleSystems = {}
+
+    moneyTextAnimation = 0
+
+    TABLE_SPRITE = love.graphics.newImage("data/graphics/images/table.png")
+
+    CHIP_SPRITE  = love.graphics.newImage("data/graphics/images/chip.png")
     
 end
 
@@ -28,7 +34,10 @@ function game()
     sceneAt = "game"
     
     setColor(255, 255, 255)
-    clear(155, 155, 155)
+    love.graphics.setShader()
+    
+    -- Draw background
+    drawSprite(TABLE_SPRITE, 400, 300)
 
     local kill = {}                                            -- Draw particles
     for id,P in ipairs(particleSystems) do
@@ -42,58 +51,62 @@ function game()
     love.graphics.draw(shadowSurface)
     love.graphics.setShader()
 
+    setColor(255, 255, 255)
+
     local kill = {}
-    for id, dice in ipairs(die) do -- Process die
+    for id, item in ipairs(items) do -- Process die
 
-        dice:process()
+        item:process()
 
-    end die = wipeKill(kill, die)
+        if item.dead then table.insert(kill, id) end
+
+    end items = wipeKill(kill, items)
 
     -- Die grabbing
     if mouseJustPressed(1) then
 
-        diceTakenWay  = 0
-        diceTakenTime = 0
+        itemTakenWay  = 0
+        itemTakenTime = 0
 
         local bestLen = 99999
 
-        for id, dice in ipairs(die) do -- Find closest dice
+        for id, item in ipairs(items) do -- Find closest dice
 
-            local diff = newVec(xM - dice.pos.x, yM - dice.pos.y)
+            local diff = newVec(xM - item.pos.x, yM - item.pos.y)
 
             if diff:getLen() < bestLen then
 
                 bestLen = diff:getLen()
 
-                diceTaken = dice
-                diceTaken.held = true
+                itemTaken = item
 
             end
 
         end
 
-        if bestLen > 48 then diceTaken.held = false; diceTaken = nil else 
+        if bestLen > 48 then itemTaken.held = false; itemTaken = nil else 
 
-            diceTaken.vel = newVec(0, 0)
-
-            diceTaken.validForPoints = true
+            itemTaken.vel = newVec(0, 0)
+            itemTaken.held = true
 
         end
 
     end
 
-    if not mousePressed(1) and diceTaken ~= nil then -- Reset grabbing if the dice is no longer held
+    if not mousePressed(1) and itemTaken ~= nil then -- Reset grabbing if the dice is no longer held
 
-        diceTaken.held = false
+        itemTaken.held = false
 
-        diceTaken.vel.x = (diceTaken.pos.x - lastDiceTakenPos.x) / dt
-        diceTaken.vel.y = (diceTaken.pos.y - lastDiceTakenPos.y) / dt
+        itemTaken.vel.x = (itemTaken.pos.x - lastitemTakenPos.x) / dt
+        itemTaken.vel.y = (itemTaken.pos.y - lastitemTakenPos.y) / dt
 
-        local speed = diceTaken.vel:getLen()
+        local speed = itemTaken.vel:getLen()
+
+        itemTaken.lastThrowSpeed = speed
 
         local particles = newParticleSystem(xM, yM, deepcopyTable(DICE_THROW_PARTICLES))
 
-        particles.rotation = diceTaken.vel:getRot()
+        particles.rotation = itemTaken.vel:getRot()
 
         particles.particleData.width.a = particles.particleData.width.a * speed / 1500
         particles.particleData.width.b = particles.particleData.width.b * speed / 1500
@@ -103,26 +116,31 @@ function game()
 
         table.insert(particleSystems, particles)
 
-        diceTaken = nil
+        itemTaken = nil
 
     end
 
-    if diceTaken ~= nil then
+    if itemTaken ~= nil then
 
-        diceTaken.fakeVertical = lerp(diceTaken.fakeVertical, -64, dt * 10)
+        itemTaken.fakeVertical = lerp(itemTaken.fakeVertical, -64, dt * 10)
 
-        lastDiceTakenPos = newVec(diceTaken.pos.x, diceTaken.pos.y)
+        lastitemTakenPos = newVec(itemTaken.pos.x, itemTaken.pos.y)
 
-        diceTaken.pos.x = xM
-        diceTaken.pos.y = yM
+        itemTaken.pos.x = xM
+        itemTaken.pos.y = yM
 
     end
 
-    for id, dice in ipairs(die) do -- Draw die
+    for id, dice in ipairs(items) do -- Draw die
 
         dice:draw()
 
     end
+
+    moneyTextAnimation = lerp(moneyTextAnimation, 0, dt * 10)
+
+    drawSprite(CHIP_SPRITE, 64, 64 + math.sin(globalTimer * 2) * 8, 1 - moneyTextAnimation, 1 + moneyTextAnimation)
+    outlinedText(112, 64 + math.sin(globalTimer * 2 + 0.8) * 8, 3, tostring(money), {255, 255, 255}, 2 - moneyTextAnimation * 2, 2 + moneyTextAnimation * 2, 0)
 
     processTextParticles()
     drawAllShadows()

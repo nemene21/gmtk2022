@@ -24,7 +24,9 @@ function newDice(x, y)
 
         number = love.math.random(1, 6),
 
-        bounceAnim = 0
+        bounceAnim = 0,
+
+        lastThrowSpeed = 0
 
     }
 
@@ -44,6 +46,8 @@ function processDice(dice)
     dice.pos.y = dice.pos.y + dice.vel.y * dt
 
     dice.verticalVel = dice.verticalVel + DICE_GRAVITY * dt * boolToInt(not dice.held)
+
+    if dice.held then dice.validForPoints = true end
 
     dice.fakeVertical = dice.fakeVertical + dice.verticalVel * dt
 
@@ -69,7 +73,7 @@ function processDice(dice)
 
             dice.bounceAnim = 0.6
 
-            shake(2, 2, 0.1)
+            shake(1, 2, 0.1)
         else
 
             if dice.validForPoints then
@@ -78,13 +82,15 @@ function processDice(dice)
 
                 money = money + dice.number
 
+                moneyTextAnimation = 0.6
+
                 addNewText("+"..tostring(dice.number), dice.pos.x, dice.pos.y - 12, {0, 255, 155})
 
             end
 
         end
 
-        dice.verticalVel = dice.verticalVel * - 0.8
+        dice.verticalVel = dice.verticalVel * - 0.9
 
     end
 

@@ -85,14 +85,14 @@ function love.draw()
     -- love.graphics.draw(mouse[mouseMode],xM,yM,0,SPRSCL,SPRSCL)
 
     -- Post processing
-    love.graphics.setShader(SHADERS.EMPTY)
+    love.graphics.setShader(SHADERS.POST_PROCESS)
 
     -- Draw display
     setColor(255 * (1 - transition), 255 * (1 - transition), 255 * (1 - transition))
 
     love.graphics.setCanvas()
 
-    love.graphics.draw(display, w * 0.5 - dw * 0.5 * displayScale, h * 0.5 - dh * 0.5 * displayScale, 0, displayScale, displayScale)
+    love.graphics.draw(display, w * 0.5 - dw * 0.5 * displayScale - screenshake[1] * displayScale, h * 0.5 - dh * 0.5 * displayScale - screenshake[2] * displayScale, 0, displayScale, displayScale)
 
     -- Check for fullscreen
     if justPressed("f1") then changeFullscreen() end
