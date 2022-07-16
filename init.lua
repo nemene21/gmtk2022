@@ -17,6 +17,8 @@ require "frameworkScripts.audio"
 require "frameworkScripts.text"
 
 -- Project Specific Modules
+require "data.scripts.shop"
+
 require "data.scripts.die"
 require "data.scripts.waterBalloons"
 

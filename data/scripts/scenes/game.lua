@@ -26,14 +26,14 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
-    events = {"earthquake"}
+    events = {"fire", "earthquake"}
 
     fires = {}
 
-    eventTimer = 30
-    eventTimerMax = 30
+    eventTimer = 1
+    eventTimerMax = 10
 
-    shopItems = {}
+    shopItems = {newSlot(80, 520, newDice(), 10)}
     shopOpen = false
     shopOpenAnim = 0
 
@@ -127,7 +127,7 @@ function game()
 
         end
 
-        if bestLen > 48 then itemTaken.held = false; itemTaken = nil else 
+        if bestLen > 48 and itemTaken ~= nil then itemTaken.held = false; itemTaken = nil else 
 
             itemTaken.vel = newVec(0, 0)
             itemTaken.held = true
@@ -257,17 +257,27 @@ function game()
         timeScale = 1 - shopOpenAnim
         if timeScale < 0.05 then timeScale = 0 end
 
-        love.graphics.setColor(0, 0, 0, shopOpenAnim * 0.5)
-        love.graphics.rectangle("fill", 0, 0, 800, 600)
-
     else
 
         shopOpenAnim = lerp(shopOpenAnim, 0, rawDt * 10)
 
         timeScale = 1 - shopOpenAnim
 
+    end
+
+    if shopOpenAnim > 0.02 then
+
         love.graphics.setColor(0, 0, 0, shopOpenAnim * 0.5)
         love.graphics.rectangle("fill", 0, 0, 800, 600)
+
+        setColor(255, 255, 255)
+
+        for id, slot in ipairs(shopItems) do
+            
+            slot:process()
+            slot:draw()
+
+        end
 
     end
 

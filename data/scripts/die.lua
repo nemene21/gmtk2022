@@ -29,13 +29,25 @@ function newDice(x, y)
         lastThrowSpeed = 0,
 
         goodThrow = 1500,
-        thrownGood = false
+        thrownGood = false,
+
+        hp = 5,
+        iFrames = 0
 
     }
 
 end
 
 function processDice(dice)
+
+    -- Hurt
+
+    dice.iFrames = dice.iFrames - dt
+    for id, fire in ipairs(fires) do
+
+        
+
+    end
 
     -- Animation
 
@@ -106,7 +118,7 @@ end
 function drawDice(dice)
 
     drawShadow(DICE_SHADOW_IMAGE, dice.pos.x, dice.pos.y, 1 - dice.bounceAnim, 1 + dice.bounceAnim)
-
+    
     drawFrame(DICE_IMAGE, (6 - dice.number) + 1, 1, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
 
 end

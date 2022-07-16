@@ -45,12 +45,12 @@ function switchTracks()
 end
     
 function playSound(string, pitch, maxPlays, vol)
-    if (maxPlays or 12) > SOUNDS_NUM_PLAYING[string]  then
-        local pitch = pitch or 1
-        local NEW_SOUND = SOUNDS[string]:clone(); NEW_SOUND:setPitch(pitch); NEW_SOUND:setVolume((vol or 1) * MASTER_VOLUME * SFX_VOLUME); NEW_SOUND:play()
-        table.insert(SOUNDS_PLAYING,{NEW_SOUND, string})
-        SOUNDS_NUM_PLAYING[string] = SOUNDS_NUM_PLAYING[string] + 1
-    end
+
+    local pitch = pitch or 1
+    local NEW_SOUND = SOUNDS[string]:clone(); NEW_SOUND:setPitch(pitch); NEW_SOUND:setVolume((vol or 1) * MASTER_VOLUME * SFX_VOLUME); NEW_SOUND:play()
+    table.insert(SOUNDS_PLAYING,{NEW_SOUND, string})
+    SOUNDS_NUM_PLAYING[string] = SOUNDS_NUM_PLAYING[string] + 1
+
 end
 
 function processSound()

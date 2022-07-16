@@ -7,7 +7,7 @@ SHADERS = {
     SHADOW = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/SHADOW.fs")))
 }
 
-SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
+SHADERS.POST_PROCESS:send("vignetteMask", love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
 
 ---------- SPECIFIC SHADER FUNCTIONS
 
