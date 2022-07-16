@@ -81,7 +81,7 @@ function processWaterBalloon(balloon)
 
             for id, fire in ipairs(fires) do
 
-                if newVec(fire.x - balloon.pos.x, fire.y - balloon.pos.y):getLen() < 128 then
+                if newVec(fire.x - balloon.pos.x, fire.y - balloon.pos.y):getLen() < 136 then
 
                     fire.wet = true
 

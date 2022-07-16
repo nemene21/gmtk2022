@@ -337,7 +337,7 @@ function game()
         
         shopOpen = not shopOpen
     
-        if shopOpen then playTrack("shop", 0.5) end
+        if shopOpen then playTrackButDontReset("shop", 0.5) end
         if not shopOpen then playTrack("gameplay", 0.5) end
     
     end

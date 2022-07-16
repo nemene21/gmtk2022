@@ -55,6 +55,14 @@ function playTrack(track, transition)
     TRACK_PLAYING = track
 
 end
+
+function playTrackButDontReset(track, transition)
+
+    if MUSIC[TRACK_PLAYING] ~= nil then MUSIC[TRACK_PLAYING]:pause() end
+
+    TRACK_PLAYING = track
+
+end
     
 function playSound(string, pitch, maxPlays, vol)
     if (maxPlays or 12) > SOUNDS_NUM_PLAYING[string]  then
