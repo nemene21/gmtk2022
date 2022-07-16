@@ -34,8 +34,8 @@ function processWaterBalloon(balloon)
     balloon.bounceAnim = lerp(balloon.bounceAnim, 0, dt * 14)
 
     -- Move
-    balloon.vel.x = lerp(balloon.vel.x, 0, dt * boolToInt(not balloon.held) * 5)
-    balloon.vel.y = lerp(balloon.vel.y, 0, dt * boolToInt(not balloon.held) * 5)
+    balloon.vel.x = lerp(balloon.vel.x, 0, dt * boolToInt(not balloon.held) * 3)
+    balloon.vel.y = lerp(balloon.vel.y, 0, dt * boolToInt(not balloon.held) * 3)
     
     balloon.pos.x = balloon.pos.x + balloon.vel.x * dt
     balloon.pos.y = balloon.pos.y + balloon.vel.y * dt

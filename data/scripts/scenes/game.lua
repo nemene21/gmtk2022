@@ -25,6 +25,11 @@ function gameReload()
 
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
+
+    fires = {}
+
+    eventTimer = 3
+    eventTimerMax = 10
     
 end
 

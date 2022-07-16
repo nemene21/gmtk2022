@@ -28,7 +28,7 @@ function newDice(x, y)
 
         lastThrowSpeed = 0,
 
-        goodThrow = 2200,
+        goodThrow = 1500,
         thrownGood = false
 
     }
@@ -42,8 +42,8 @@ function processDice(dice)
     dice.bounceAnim = lerp(dice.bounceAnim, 0, dt * 14)
 
     -- Move
-    dice.vel.x = lerp(dice.vel.x, 0, dt * boolToInt(not dice.held) * 5)
-    dice.vel.y = lerp(dice.vel.y, 0, dt * boolToInt(not dice.held) * 5)
+    dice.vel.x = lerp(dice.vel.x, 0, dt * boolToInt(not dice.held) * 3)
+    dice.vel.y = lerp(dice.vel.y, 0, dt * boolToInt(not dice.held) * 3)
     
     dice.pos.x = dice.pos.x + dice.vel.x * dt
     dice.pos.y = dice.pos.y + dice.vel.y * dt
@@ -91,7 +91,7 @@ function processDice(dice)
 
                 if dice.thrownGood then text = text .. "x2" end
 
-                addNewText(text, dice.pos.x, dice.pos.y - 12, {0, 255, 155}, 2)
+                addNewText(text, dice.pos.x, dice.pos.y - 36, {0, 255, 155 * boolToInt(not dice.thrownGood)}, 2)
 
             end
 
