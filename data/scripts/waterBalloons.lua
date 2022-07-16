@@ -20,7 +20,7 @@ function newWaterBalloon(x, y)
 
         lastThrowSpeed = 0,
 
-        goodThrow = 1600,
+        goodThrow = 1200,
         thrownGood = false
 
     }
@@ -60,6 +60,16 @@ function processWaterBalloon(balloon)
             particles.rotation = balloon.vel:getRot()
 
             table.insert(particleSystems, newParticleSystem(balloon.pos.x, balloon.pos.y, particles))
+
+            for id, fire in ipairs(fires) do
+
+                if newVec(fire.x - balloon.pos.x, fire.y - balloon.pos.y):getLen() < 128 then
+
+                    fire.wet = true
+
+                end
+
+            end
 
         end
 

@@ -32,6 +32,12 @@ function gameReload()
 
     eventTimer = 3
     eventTimerMax = 10
+
+    shopItems = {}
+    shopOpen = false
+    shopOpenAnim = 0
+
+    earthquakeTimer = 
     
 end
 
@@ -89,9 +95,7 @@ function game()
     end items = wipeKill(kill, items)
 
     -- Die grabbing
-    if mouseJustPressed(1) then
-
-        handAnim = 0.6
+    if mouseJustPressed(1) and not shopOpen then
 
         itemTakenWay  = 0
         itemTakenTime = 0
@@ -121,7 +125,7 @@ function game()
 
     end
 
-    if not mousePressed(1) and itemTaken ~= nil then -- Reset grabbing if the dice is no longer held
+    if (not mousePressed(1) and itemTaken ~= nil) or (shopOpen and itemTaken ~= nil) then -- Reset grabbing if the dice is no longer held
 
         itemTaken.held = false
 
@@ -179,6 +183,22 @@ function game()
 
     end
 
+    local kill = {}
+    for id, fire in ipairs(fires) do -- Bad events
+
+        fire:process()
+        fire:draw()
+
+        if fire.hp < 0 then
+
+            table.insert(kill, id)
+
+        end
+
+    end fires = wipeKill(kill, fires)
+
+    setColor(255, 255, 255)
+
     moneyTextAnimation = lerp(moneyTextAnimation, 0, dt * 10)
 
     drawSprite(CHIP_SPRITE, 64, 64 + math.sin(globalTimer * 2) * 8, 1 - moneyTextAnimation, 1 + moneyTextAnimation)
@@ -187,7 +207,33 @@ function game()
     processTextParticles()
     drawAllShadows()
 
-    handAnim = lerp(handAnim, 0, dt * 12)
+    if justPressed("space") then shopOpen = not shopOpen end
+
+    if shopOpen then
+
+        shopOpenAnim = lerp(shopOpenAnim, 1, rawDt * 10)
+
+        timeScale = 1 - shopOpenAnim
+        if timeScale < 0.05 then timeScale = 0 end
+
+        love.graphics.setColor(0, 0, 0, shopOpenAnim * 0.5)
+        love.graphics.rectangle("fill", 0, 0, 800, 600)
+
+    else
+
+        shopOpenAnim = lerp(shopOpenAnim, 0, rawDt * 10)
+
+        timeScale = 1 - shopOpenAnim
+
+        love.graphics.setColor(0, 0, 0, shopOpenAnim * 0.5)
+        love.graphics.rectangle("fill", 0, 0, 800, 600)
+
+    end
+
+    setColor(255, 255, 255)
+    handAnim = lerp(handAnim, 0, rawDt * 12)
+
+    if mouseJustPressed(1) then handAnim = 0.6 end
 
     drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM, 1 - handAnim, 1 - handAnim)
 

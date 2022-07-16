@@ -36,6 +36,8 @@ function love.load()
 
     -- Transitions
     transition = 1
+
+    timeScale = 1
 end
 
 -- Play scenes
@@ -44,6 +46,9 @@ function love.draw()
     -- Time and resetting
     dt = love.timer.getDelta()
     globalTimer = globalTimer + dt
+
+    rawDt = dt
+    dt = dt * timeScale
     
     -- Mouse pos
 
