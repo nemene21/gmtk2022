@@ -44,11 +44,24 @@ function drawParticleSpark(P,data)
                                 point4.x - camera[1] + P.x, point4.y - camera[2] + P.y})
 end
 
+function drawParticleSparkLong(P,data)
+    local point1 = newVec(P.width * P.lifetime / P.lifetimeStart, 0); local point2 = newVec(0, -P.width * 0.1 * P.lifetime / P.lifetimeStart)
+    local point3 = newVec(-P.width * P.lifetime / P.lifetimeStart, 0); local point4 = newVec(0, P.width * 0.1 * P.lifetime / P.lifetimeStart)
+    point1:rotate(P.vel:getRot()); point2:rotate(P.vel:getRot()); point3:rotate(P.vel:getRot()); point4:rotate(P.vel:getRot())
+
+    love.graphics.polygon("fill",{
+                                point1.x - camera[1] + P.x, point1.y - camera[2] + P.y, 
+                                point2.x - camera[1] + P.x, point2.y - camera[2] + P.y, 
+                                point3.x - camera[1] + P.x, point3.y - camera[2] + P.y, 
+                                point4.x - camera[1] + P.x, point4.y - camera[2] + P.y})
+end
+
 DRAWS = {
 ["circle"] = drawParticleCircle,
 ["circleGlow"] = drawParticleCircleGlow,
 ["square"] = drawParticleSquare,
 ["spark"] = drawParticleSpark,
+["sparkLong"] = drawParticleSparkLong,
 ["shockwave"] = drawParticleShockwave
 }
 -- INTERPOLATE WIDTH

@@ -26,11 +26,11 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
-    events = {"fire", "earthquake", "laser"}
+    events = {"fire", "earthquake", "laser", "wind"}
 
     fires = {}
 
-    eventTimer = 20
+    eventTimer = 1
     eventTimerMax = 20
 
     shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10)}
@@ -52,6 +52,11 @@ function gameReload()
 
     won = nil
     endAnimation = 0
+
+    windTimer = 0
+    windStrenght = 0
+
+    WIND_PARTICLES = newParticleSystem(850, 300, loadJson("data/graphics/particles/windParticles.json"))
 
 end
 
@@ -95,6 +100,8 @@ function game()
 
         local event = events[love.math.random(1, #events)]
 
+        event = "wind"
+
         if event == "fire" then
 
             table.insert(fires, newFire(love.math.random(64, 736), love.math.random(64, 536)))
@@ -115,6 +122,12 @@ function game()
             table.insert(lasers, newLaser(-96))
 
             playSound("laser")
+
+        end
+
+        if event == "wind" then
+
+            windTimer = 10
 
         end
 
@@ -145,6 +158,8 @@ function game()
         if item.isDice == true then nDie = nDie + 1 end
 
         item:process()
+
+        item.pos.x = item.pos.x - windStrenght * 125 * dt
 
         item.gettingHitByLaser = false
 
@@ -256,6 +271,8 @@ function game()
         itemTaken.pos.x = lerp(itemTaken.pos.x, xM, dt * 50)
         itemTaken.pos.y = lerp(itemTaken.pos.y, yM, dt * 50)
 
+        itemTaken.verticalVel = 0
+
     end
 
     for id, item in ipairs(items) do -- Draw die
@@ -325,6 +342,12 @@ function game()
 
     end
 
+    windStrenght = lerp(windStrenght, boolToInt(windTimer > 0), 2 * dt)
+    windTimer = windTimer - dt
+
+    WIND_PARTICLES.spawning = windTimer > 0
+    WIND_PARTICLES:process()
+
     moneyTextAnimation = lerp(moneyTextAnimation, 0, rawDt * 10)
 
     drawSprite(CHIP_SPRITE, 64, 64 + math.sin(globalTimer * 2) * 8, 1 - moneyTextAnimation, 1 + moneyTextAnimation)
@@ -382,7 +405,9 @@ function game()
 
     drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM, 1 - handAnim, 1 - handAnim)
 
-    if won == false then
+    if money > 250 then won = true end
+
+    if won ~= nil then
 
         endAnimation = clamp(endAnimation + dt, 0, 1)
         transition = endAnimation

@@ -8,7 +8,7 @@ function newFire(x, y)
 
     return {
         
-        x = x, y = y,
+        x = clamp(x, 80, 720), y = clamp(y, 80, 520),
 
         process = processFire,
         draw = drawFire,
