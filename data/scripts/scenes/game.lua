@@ -26,19 +26,22 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
-    events = {"fire"}
+    events = {"earthquake"}
 
     fires = {}
 
-    eventTimer = 3
-    eventTimerMax = 10
+    eventTimer = 30
+    eventTimerMax = 30
 
     shopItems = {}
     shopOpen = false
     shopOpenAnim = 0
 
-    earthquakeTimer = 
-    
+    earthquakeTimer = 0
+    earthquakeShakes = 0
+
+    EARTHQUAKE_PARTICLES = loadJson("data/graphics/particles/earthquake.json")
+
 end
 
 function gameDie()
@@ -65,6 +68,14 @@ function game()
         if event == "fire" then
 
             table.insert(fires, newFire(love.math.random(64, 736), love.math.random(64, 536)))
+
+        end
+
+        if event == "earthquake" then
+
+            earthquakeShakes = 8
+
+            earthquakeTimer = 0
 
         end
 
@@ -128,6 +139,8 @@ function game()
     if (not mousePressed(1) and itemTaken ~= nil) or (shopOpen and itemTaken ~= nil) then -- Reset grabbing if the dice is no longer held
 
         itemTaken.held = false
+
+        playSound("throwItem", love.math.random(80, 120) * 0.01)
 
         itemTaken.vel.x = (itemTaken.pos.x - lastitemTakenPos.x) / dt
         itemTaken.vel.y = (itemTaken.pos.y - lastitemTakenPos.y) / dt
@@ -198,6 +211,34 @@ function game()
     end fires = wipeKill(kill, fires)
 
     setColor(255, 255, 255)
+
+    earthquakeTimer = earthquakeTimer - dt
+
+    if earthquakeTimer < 0 and earthquakeShakes > 0 then
+        
+        shake(8, 2, 0.15)
+
+        earthquakeTimer = 1
+
+        earthquakeShakes = earthquakeShakes - 1
+
+        for id, item in ipairs(items) do
+
+            local vel = newVec(love.math.random(200, 400))
+
+            vel:rotate(love.math.random(0, 360))
+
+            item.vel = vel
+
+            item.verticalVel = love.math.random(300, 400)
+
+            if item.fakeVertical > -1 then item.fakeVertical = -1 end
+
+            table.insert(particleSystems, newParticleSystem(400, 300, deepcopyTable(EARTHQUAKE_PARTICLES)))
+
+        end
+
+    end
 
     moneyTextAnimation = lerp(moneyTextAnimation, 0, dt * 10)
 

@@ -1,12 +1,15 @@
 
 SOUNDS = {
+
+throwItem = love.audio.newSource("data/sounds/SFX/throwItem.wav", "stream")
+
 }
 
 MUSIC = {
 }
 
 MASTER_VOLUME = 1
-SFX_VOLUME = 1
+SFX_VOLUME = 2
 MUSIC_VOLUME = 1
 trackPitch = 1
 

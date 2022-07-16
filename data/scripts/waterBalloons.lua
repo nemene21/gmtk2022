@@ -49,7 +49,7 @@ function processWaterBalloon(balloon)
     if balloon.fakeVertical > 0 then
 
         balloon.fakeVertical = 0
-        balloon.verticalVel  = 0
+        balloon.verticalVel = balloon.verticalVel * - 0.5
 
         if balloon.thrownGood then
 
