@@ -18,7 +18,11 @@ function newFire(x, y)
 
         hp = 3,
 
-        animation = 0
+        spreadTimer = 5,
+
+        animation = 0,
+
+        wet = false
 
     }
 end
@@ -31,6 +35,15 @@ function processFire(fire)
     fire.animation = lerp(fire.animation, boolToInt(not fire.wet), dt * 5)
 
     fire.hp = clamp(fire.hp - dt * boolToInt(fire.wet), 0, 3)
+
+    fire.spreadTimer = fire.spreadTimer - dt
+    if fire.spreadTimer < 0 and #fires <= 10 and not fire.wet then
+
+        fire.spreadTimer = 15
+
+        table.insert(fires, newFire(fire.x + love.math.random(-128, 128), fire.y + love.math.random(-128, 128)))
+
+    end
 
 end
 

@@ -20,7 +20,7 @@ function newWaterBalloon(x, y)
 
         lastThrowSpeed = 0,
 
-        goodThrow = 1200,
+        goodThrow = 1000,
         thrownGood = false
 
     }
@@ -60,6 +60,8 @@ function processWaterBalloon(balloon)
             particles.rotation = balloon.vel:getRot()
 
             table.insert(particleSystems, newParticleSystem(balloon.pos.x, balloon.pos.y, particles))
+
+            playSound("waterBalloonDie", love.math.random(80, 120) * 0.01)
 
             for id, fire in ipairs(fires) do
 

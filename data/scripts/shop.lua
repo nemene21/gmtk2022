@@ -34,6 +34,8 @@ function processSlot(slot)
 
             table.insert(items, deepcopyTable(slot.item))
 
+            playSound("buy", love.math.random(80, 120) * 0.01)
+
         end
 
     else

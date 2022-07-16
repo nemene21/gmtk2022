@@ -1,7 +1,19 @@
 
 SOUNDS = {
 
-throwItem = love.audio.newSource("data/sounds/SFX/throwItem.wav", "stream")
+throwItem = love.audio.newSource("data/sounds/SFX/throwItem.wav", "stream"),
+
+diceBounce = love.audio.newSource("data/sounds/SFX/diceBounce.wav", "stream"),
+
+pickUp = love.audio.newSource("data/sounds/SFX/pickUp.wav", "stream"),
+
+itemDestroyed = love.audio.newSource("data/sounds/SFX/itemDestroyed.wav", "stream"),
+
+waterBalloonDie = love.audio.newSource("data/sounds/SFX/waterBalloonDie.wav", "stream"),
+
+buy = love.audio.newSource("data/sounds/SFX/buy.wav", "stream"),
+
+diceDie = love.audio.newSource("data/sounds/SFX/diceDie.wav", "stream")
 
 }
 

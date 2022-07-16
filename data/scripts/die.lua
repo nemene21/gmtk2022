@@ -37,7 +37,7 @@ function newDice(x, y)
 
         lastThrowSpeed = 0,
 
-        goodThrow = 1500,
+        goodThrow = 1000,
         thrownGood = false,
 
         hp = 5,
@@ -54,11 +54,13 @@ function processDice(dice)
     dice.iFrames = clamp(dice.iFrames - dt, 0, 1)
     for id, fire in ipairs(fires) do
 
-        if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 128 and dice.iFrames == 0 then
+        if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 96 and dice.iFrames == 0 and fire.wet == false then
 
             dice.iFrames = 1
 
             dice.hp = dice.hp - 1
+
+            playSound("diceDie", love.math.random(80, 120) * 0.01)
             
         end
 
@@ -93,6 +95,8 @@ function processDice(dice)
 
         if dice.verticalVel > 160 then
 
+            playSound("diceBounce", love.math.random(80, 120) * 0.01)
+
             dice.number = love.math.random(1, 6)
 
             local particles = newParticleSystem(dice.pos.x, dice.pos.y, deepcopyTable(DICE_BOUNCE_PARTICLES))
@@ -116,7 +120,7 @@ function processDice(dice)
 
                 local text = "+"..tostring(dice.number)
 
-                if dice.thrownGood then text = text .. "x2" end
+                if dice.thrownGood then text = text .. "x2"; dice.thrownGood = false end
 
                 addNewText(text, dice.pos.x, dice.pos.y - 36, {0, 255, 155 * boolToInt(not dice.thrownGood)}, 2)
 

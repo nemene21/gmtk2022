@@ -26,7 +26,7 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
-    events = {"fire", "earthquake"}
+    events = {"fire", "earthquake", "laser"}
 
     fires = {}
 
@@ -46,6 +46,8 @@ function gameReload()
 
     grabbedFromShop = false
 
+    lasers = {}
+
 end
 
 function gameDie()
@@ -57,6 +59,7 @@ function itemSort(i1, i2)
 end
 
 function game()
+
     -- Reset
     sceneAt = "game"
     
@@ -113,8 +116,8 @@ function game()
         item.pos.x = item.pos.x or 100
         item.pos.y = item.pos.y or 100
 
-        if item.dead then table.insert(kill, id)
-        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y > 624 then table.insert(kill, id) end end
+        if item.dead then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01)
+        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y > 624 then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01) end end
 
     end items = wipeKill(kill, items)
 
@@ -147,6 +150,8 @@ function game()
                 itemTaken.vel = newVec(0, 0)
                 itemTaken.held = true
 
+                playSound("pickUp", love.math.random(80, 120) * 0.01)
+
             end
 
         end
@@ -158,14 +163,22 @@ function game()
         grabbedFromShop = false
         itemTaken.held = false
 
-        playSound("throwItem", love.math.random(80, 120) * 0.01)
-
         itemTaken.vel.x = (itemTaken.pos.x - lastitemTakenPos.x) / dt
         itemTaken.vel.y = (itemTaken.pos.y - lastitemTakenPos.y) / dt
 
         local speed = itemTaken.vel:getLen()
 
         itemTaken.lastThrowSpeed = speed
+
+        if speed < 300 then
+
+            playSound("pickUp", love.math.random(80, 120) * 0.01)
+
+        else
+
+            playSound("throwItem", love.math.random(80, 120) * 0.01)
+
+        end
 
         local particles = newParticleSystem(xM, yM, deepcopyTable(DICE_THROW_PARTICLES))
 
