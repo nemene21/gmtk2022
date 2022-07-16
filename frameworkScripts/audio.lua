@@ -18,6 +18,9 @@ diceDie = love.audio.newSource("data/sounds/SFX/diceDie.wav", "stream")
 }
 
 MUSIC = {
+
+gameplay = love.audio.newSource("data/sounds/music/gameplay.wav", "stream")
+
 }
 
 MASTER_VOLUME = 1
@@ -72,20 +75,18 @@ function processSound()
     end
 
     if MUSIC[TRACK_PLAYING] ~= nil then
-        MUSIC[TRACK_PLAYING]:setVolume(MUSIC_VOLUME * MASTER_VOLUME * trackVolume)
-        MUSIC[TRACK_PLAYING]:setPitch(trackPitch)
+        MUSIC[TRACK_PLAYING]:setVolume(MUSIC_VOLUME * MASTER_VOLUME)
         
         if not MUSIC[TRACK_PLAYING]:isPlaying() then MUSIC[TRACK_PLAYING]:play() end
     end
 
     if MUSIC[NEW_TRACK] ~= nil then
-        MUSIC[NEW_TRACK]:setVolume(MUSIC_VOLUME * MASTER_VOLUME * trackVolume)
-        MUSIC[NEW_TRACK]:setPitch(trackPitch)
+        MUSIC[NEW_TRACK]:setVolume(MUSIC_VOLUME * MASTER_VOLUME)
         
         if not MUSIC[NEW_TRACK]:isPlaying() then MUSIC[NEW_TRACK]:play() end
     end
     
-    trackTransition = math.max(trackTransition - dt, 0)
+    trackTransition = math.max(trackTransition - (dt or 0), 0)
     if trackTransition == 0 and NEW_TRACK ~= nil then
 
         if MUSIC[TRACK_PLAYING] ~= nil then MUSIC[TRACK_PLAYING]:stop() end

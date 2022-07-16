@@ -26,11 +26,11 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
-    events = {"fire", "earthquake", "laser"}
+    events = {"laser"}-- {"fire", "earthquake", "laser"}
 
     fires = {}
 
-    eventTimer = 20
+    eventTimer = 1
     eventTimerMax = 30
 
     shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10)}
@@ -47,6 +47,8 @@ function gameReload()
     grabbedFromShop = false
 
     lasers = {}
+
+    playTrack("gameplay", 1.5)
 
 end
 
@@ -90,6 +92,12 @@ function game()
 
         end
 
+        if event == "laser" then
+
+            table.insert(lasers, newLaser())
+
+        end
+
     end
 
     local kill = {}                                            -- Draw particles
@@ -109,9 +117,11 @@ function game()
     table.sort(items, itemSort)
 
     local kill = {}
-    for id, item in ipairs(items) do -- Process die
+    for id, item in ipairs(items) do -- Process items
 
         item:process()
+
+        item.gettingHitByLaser = false
 
         item.pos.x = item.pos.x or 100
         item.pos.y = item.pos.y or 100
@@ -121,7 +131,7 @@ function game()
 
     end items = wipeKill(kill, items)
 
-    -- Die grabbing
+    -- Item grabbing
     if mouseJustPressed(1) and not shopOpen then
 
         itemTakenWay  = 0
@@ -150,7 +160,7 @@ function game()
                 itemTaken.vel = newVec(0, 0)
                 itemTaken.held = true
 
-                playSound("pickUp", love.math.random(80, 120) * 0.01)
+                playSound("pickUp", love.math.random(100, 120) * 0.01)
 
             end
 
@@ -172,7 +182,7 @@ function game()
 
         if speed < 300 then
 
-            playSound("pickUp", love.math.random(80, 120) * 0.01)
+            playSound("pickUp", love.math.random(60, 80) * 0.01)
 
         else
 
@@ -241,6 +251,20 @@ function game()
         end
 
     end fires = wipeKill(kill, fires)
+
+    local kill = {}
+    for id, laser in ipairs(lasers) do
+
+        laser:process()
+        laser:draw()
+
+        if laser.x > 880 then
+
+            table.insert(kill, id)
+
+        end
+
+    end lasers = wipeKill(kill, lasers)
 
     setColor(255, 255, 255)
 

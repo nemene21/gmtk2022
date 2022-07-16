@@ -23,6 +23,7 @@ require "data.scripts.die"
 require "data.scripts.waterBalloons"
 
 require "data.scripts.fire"
+require "data.scripts.lasers"
 
 -- Scenes
 require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"

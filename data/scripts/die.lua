@@ -41,7 +41,9 @@ function newDice(x, y)
         thrownGood = false,
 
         hp = 5,
-        iFrames = 0
+        iFrames = 0,
+
+        radius = 24
 
     }
 
@@ -51,12 +53,22 @@ function processDice(dice)
 
     -- Hurt
 
+    if dice.gettingHitByLaser and dice.iFrames == 0 then
+
+        dice.iFrames = 0.5
+
+        dice.hp = dice.hp - 1
+
+        playSound("diceDie", love.math.random(80, 120) * 0.01)
+
+    end
+
     dice.iFrames = clamp(dice.iFrames - dt, 0, 1)
     for id, fire in ipairs(fires) do
 
         if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 96 and dice.iFrames == 0 and fire.wet == false then
 
-            dice.iFrames = 1
+            dice.iFrames = 0.5
 
             dice.hp = dice.hp - 1
 

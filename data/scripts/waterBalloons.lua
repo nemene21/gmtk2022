@@ -21,13 +21,29 @@ function newWaterBalloon(x, y)
         lastThrowSpeed = 0,
 
         goodThrow = 1000,
-        thrownGood = false
+        thrownGood = false,
+
+        radius = 24
 
     }
 
 end
 
 function processWaterBalloon(balloon)
+
+    if balloon.gettingHitByLaser then
+
+        balloon.dead = true
+
+        local particles = deepcopyTable(BALLOON_DIE_PARTICLES)
+
+        particles.spread = 360
+
+        table.insert(particleSystems, newParticleSystem(balloon.pos.x, balloon.pos.y, particles))
+
+        playSound("waterBalloonDie", love.math.random(80, 120) * 0.01)
+
+    end
 
     -- Animation
 

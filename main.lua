@@ -7,7 +7,7 @@ function love.load()
     -- Window and defaulting
     globalTimer = 0; love.graphics.setDefaultFilter("nearest","nearest")
 
-    fullscreen = false; title = "Ne_mene´s Framework"
+    fullscreen = false; title = "Dicing with Chaos"
 
     WS = {800,600}; wFlags = {resizable=true}
     aspectRatio = {WS[1]/WS[2],WS[2]/WS[1]}
@@ -42,6 +42,8 @@ end
 
 -- Play scenes
 function love.draw()
+
+    processSound()
 
     -- Time and resetting
     dt = love.timer.getDelta()
