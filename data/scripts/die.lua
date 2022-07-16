@@ -43,7 +43,9 @@ function newDice(x, y)
         hp = 5,
         iFrames = 0,
 
-        radius = 24
+        radius = 24,
+
+        isDice = true
 
     }
 

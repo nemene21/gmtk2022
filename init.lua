@@ -27,7 +27,7 @@ require "data.scripts.fire"
 require "data.scripts.lasers"
 
 -- Scenes
-require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"; require "data.scripts.scenes.menu"
+require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"; require "data.scripts.scenes.menu"; require "data.scripts.scenes.endScreen"
 
 scenes = {
 
@@ -35,6 +35,8 @@ blank  = {blank,blankReload,blankDie},
 
 game   = {game,gameReload,gameDie},
 
-menu   = {menu,menuReload,menuDie}
+menu   = {menu,menuReload,menuDie},
+
+endScreen = {endScreen,endScreenReload,endScreenDie}
 
 }

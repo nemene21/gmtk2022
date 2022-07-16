@@ -1,20 +1,5 @@
 
-
-DICE_IMAGE = newSpritesheet("data/graphics/images/dicesheet.png", 16, 16)
-DICE_SHADOW_IMAGE = love.graphics.newImage("data/graphics/images/diceShadow.png")
-DICE_GRAVITY = 1200
-
-DICE_BOUNCE_PARTICLES = loadJson("data/graphics/particles/diceBounce.json")
-DICE_THROW_PARTICLES  =  loadJson("data/graphics/particles/throwDice.json")
-
-CRACKED_IMAGES = {
-
-    love.graphics.newImage("data/graphics/images/cracked1.png"),
-    love.graphics.newImage("data/graphics/images/cracked2.png"),
-    love.graphics.newImage("data/graphics/images/cracked3.png"),
-    love.graphics.newImage("data/graphics/images/cracked4.png")
-
-}
+RADIO_IMAGE = newSpritesheet("data/graphics/images", 26, 18)
 
 function newDice(x, y)
 
@@ -151,5 +136,6 @@ end
 
 function drawDice(dice)
 
+    drawFrame(RADIO_IMAGE, 1, 1)
 
 end

@@ -31,7 +31,7 @@ function gameReload()
     fires = {}
 
     eventTimer = 20
-    eventTimerMax = 30
+    eventTimerMax = 20
 
     shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10)}
     shopOpen = false
@@ -49,6 +49,9 @@ function gameReload()
     lasers = {}
 
     playTrack("gameplay", 1.5)
+
+    won = nil
+    endAnimation = 0
 
 end
 
@@ -92,8 +95,6 @@ function game()
 
         local event = events[love.math.random(1, #events)]
 
-        event = "laser"
-
         if event == "fire" then
 
             table.insert(fires, newFire(love.math.random(64, 736), love.math.random(64, 536)))
@@ -136,7 +137,12 @@ function game()
     table.sort(items, itemSort)
 
     local kill = {}
+
+    local nDie = 0
+
     for id, item in ipairs(items) do -- Process items
+
+        if item.isDice == true then nDie = nDie + 1 end
 
         item:process()
 
@@ -149,6 +155,8 @@ function game()
         else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y + item.fakeVertical > 624 then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01) end end
 
     end items = wipeKill(kill, items)
+
+    if nDie == 0 then won = false; message = "You lost all the die..." end
 
     -- Item grabbing
     if mouseJustPressed(1) and not shopOpen then
@@ -371,6 +379,15 @@ function game()
     if mouseJustPressed(1) then handAnim = 0.6 end
 
     drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM, 1 - handAnim, 1 - handAnim)
+
+    if won == false then
+
+        endAnimation = clamp(endAnimation + dt, 0, 1)
+        transition = endAnimation
+
+        if endAnimation == 1 then sceneAt = "endScreen" end
+
+    end
 
     -- Return scene
     return sceneAt
