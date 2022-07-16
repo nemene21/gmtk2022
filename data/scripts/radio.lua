@@ -1,4 +1,5 @@
 
+
 DICE_IMAGE = newSpritesheet("data/graphics/images/dicesheet.png", 16, 16)
 DICE_SHADOW_IMAGE = love.graphics.newImage("data/graphics/images/diceShadow.png")
 DICE_GRAVITY = 1200
@@ -55,7 +56,7 @@ function processDice(dice)
 
     if dice.gettingHitByLaser and dice.iFrames == 0 then
 
-        dice.iFrames = 0.25
+        dice.iFrames = 0.5
 
         dice.hp = dice.hp - 1
 
@@ -68,7 +69,7 @@ function processDice(dice)
 
         if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 96 and dice.iFrames == 0 and fire.wet == false then
 
-            dice.iFrames = 0.25
+            dice.iFrames = 0.5
 
             dice.hp = dice.hp - 1
 
@@ -150,16 +151,5 @@ end
 
 function drawDice(dice)
 
-    drawShadow(DICE_SHADOW_IMAGE, dice.pos.x, dice.pos.y, 1 - dice.bounceAnim, 1 + dice.bounceAnim)
-
-    setColor(255, 255, 255, 255 * (1 - math.abs(math.sin(dice.iFrames * 3.14 * 4))))
-    
-    drawFrame(DICE_IMAGE, (6 - dice.number) + 1, 1, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
-
-    if dice.hp ~= 5 and dice.hp ~= 0 then
-
-        drawSprite(CRACKED_IMAGES[5 - dice.hp], dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
-
-    end
 
 end

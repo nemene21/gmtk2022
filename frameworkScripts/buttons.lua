@@ -24,7 +24,7 @@ function processButton(btn)
 
     if btn.animation > 0.01 then
 
-        setColor(38, 43, 68)
+        setColor(0, 40, 89)
         love.graphics.rectangle("fill", 0, btn.y - 32 * btn.animation, 800, 64 * btn.animation)
 
     end

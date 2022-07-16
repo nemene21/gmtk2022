@@ -92,6 +92,8 @@ function game()
 
         local event = events[love.math.random(1, #events)]
 
+        event = "laser"
+
         if event == "fire" then
 
             table.insert(fires, newFire(love.math.random(64, 736), love.math.random(64, 536)))
@@ -144,7 +146,7 @@ function game()
         item.pos.y = item.pos.y or 100
 
         if item.dead then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01)
-        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y > 624 then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01) end end
+        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y + item.fakeVertical > 624 then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01) end end
 
     end items = wipeKill(kill, items)
 

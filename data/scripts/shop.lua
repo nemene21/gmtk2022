@@ -55,7 +55,7 @@ function drawSlot(slot)
 
     local canBuy = money >= slot.price
 
-    outlinedText(slot.x + 16, slot.y + (1 - shopOpenAnim) * 200 + 24, 2, "$" .. tostring(slot.price), {255 * boolToInt(not canBuy), 0, 255 * boolToInt(canBuy)})
+    outlinedText(slot.x + 16, slot.y + (1 - shopOpenAnim) * 200 + 24, 2, "$" .. tostring(slot.price), {255 * boolToInt(not canBuy), 255 * boolToInt(canBuy), 0})
     setColor(255, 255, 255)
 
 end
