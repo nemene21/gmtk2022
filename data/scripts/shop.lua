@@ -25,6 +25,17 @@ function processSlot(slot)
 
         slot.slotAnimation = lerp(slot.slotAnimation, 1, rawDt * 8)
 
+        if mouseJustPressed(1) and money >= slot.price then
+
+            money = money - slot.price
+            moneyTextAnimation = 0.6
+
+            grabbedFromShop = true
+
+            table.insert(items, deepcopyTable(slot.item))
+
+        end
+
     else
 
         slot.slotAnimation = lerp(slot.slotAnimation, 0, rawDt * 8)
@@ -39,5 +50,10 @@ function drawSlot(slot)
 
     drawSprite(SLOT_IMAGE, slot.x, slot.y + (1 - shopOpenAnim) * 200, 1 + slot.slotAnimation * 0.2, 1 + slot.slotAnimation * 0.2)
     slot.item:draw()
+
+    local canBuy = money >= slot.price
+
+    outlinedText(slot.x + 16, slot.y + (1 - shopOpenAnim) * 200 + 24, 2, "$" .. tostring(slot.price), {255 * boolToInt(not canBuy), 0, 255 * boolToInt(canBuy)})
+    setColor(255, 255, 255)
 
 end

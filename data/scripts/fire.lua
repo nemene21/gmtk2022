@@ -28,9 +28,9 @@ function processFire(fire)
     fire.particles.spawning = not fire.wet
     fire.particlesSmoke.spawning = not fire.wet
     
-    fire.animation = fire.animation + (boolToInt(not fire.wet) * 2 - 1) * 3
+    fire.animation = lerp(fire.animation, boolToInt(not fire.wet), dt * 5)
 
-    fire.hp = fire.hp - dt * boolToInt(fire.wet)
+    fire.hp = clamp(fire.hp - dt * boolToInt(fire.wet), 0, 3)
 
 end
 

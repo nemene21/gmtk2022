@@ -30,10 +30,10 @@ function gameReload()
 
     fires = {}
 
-    eventTimer = 1
-    eventTimerMax = 10
+    eventTimer = 20
+    eventTimerMax = 30
 
-    shopItems = {newSlot(80, 520, newDice(), 10)}
+    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10)}
     shopOpen = false
     shopOpenAnim = 0
 
@@ -42,10 +42,18 @@ function gameReload()
 
     EARTHQUAKE_PARTICLES = loadJson("data/graphics/particles/earthquake.json")
 
+    ITEM_DIE_PARTICLES = loadJson("data/graphics/particles/itemDie.json")
+
+    grabbedFromShop = false
+
 end
 
 function gameDie()
     
+end
+
+function itemSort(i1, i2)
+    return i1.pos.y < i2.pos.y
 end
 
 function game()
@@ -95,10 +103,15 @@ function game()
 
     setColor(255, 255, 255)
 
+    table.sort(items, itemSort)
+
     local kill = {}
     for id, item in ipairs(items) do -- Process die
 
         item:process()
+
+        item.pos.x = item.pos.x or 100
+        item.pos.y = item.pos.y or 100
 
         if item.dead then table.insert(kill, id)
         else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y > 624 then table.insert(kill, id) end end
@@ -129,15 +142,20 @@ function game()
 
         if bestLen > 48 and itemTaken ~= nil then itemTaken.held = false; itemTaken = nil else 
 
-            itemTaken.vel = newVec(0, 0)
-            itemTaken.held = true
+            if itemTaken ~= nil then
+
+                itemTaken.vel = newVec(0, 0)
+                itemTaken.held = true
+
+            end
 
         end
 
     end
 
-    if (not mousePressed(1) and itemTaken ~= nil) or (shopOpen and itemTaken ~= nil) then -- Reset grabbing if the dice is no longer held
+    if (not mousePressed(1) and itemTaken ~= nil) or (shopOpen and itemTaken ~= nil and (not grabbedFromShop)) then -- Reset grabbing if the dice is no longer held
 
+        grabbedFromShop = false
         itemTaken.held = false
 
         playSound("throwItem", love.math.random(80, 120) * 0.01)
@@ -190,9 +208,10 @@ function game()
 
     end
 
-    for id, dice in ipairs(items) do -- Draw die
+    for id, item in ipairs(items) do -- Draw die
 
-        dice:draw()
+        setColor(255, 255, 255)
+        item:draw()
 
     end
 
@@ -202,7 +221,7 @@ function game()
         fire:process()
         fire:draw()
 
-        if fire.hp < 0 then
+        if fire.hp <= 0 then
 
             table.insert(kill, id)
 
@@ -240,7 +259,7 @@ function game()
 
     end
 
-    moneyTextAnimation = lerp(moneyTextAnimation, 0, dt * 10)
+    moneyTextAnimation = lerp(moneyTextAnimation, 0, rawDt * 10)
 
     drawSprite(CHIP_SPRITE, 64, 64 + math.sin(globalTimer * 2) * 8, 1 - moneyTextAnimation, 1 + moneyTextAnimation)
     outlinedText(112, 64 + math.sin(globalTimer * 2 + 0.8) * 8, 3, tostring(money), {255, 255, 255}, 2 - moneyTextAnimation * 2, 2 + moneyTextAnimation * 2, 0)

@@ -6,6 +6,15 @@ DICE_GRAVITY = 1200
 DICE_BOUNCE_PARTICLES = loadJson("data/graphics/particles/diceBounce.json")
 DICE_THROW_PARTICLES  =  loadJson("data/graphics/particles/throwDice.json")
 
+CRACKED_IMAGES = {
+
+    love.graphics.newImage("data/graphics/images/cracked1.png"),
+    love.graphics.newImage("data/graphics/images/cracked2.png"),
+    love.graphics.newImage("data/graphics/images/cracked3.png"),
+    love.graphics.newImage("data/graphics/images/cracked4.png")
+
+}
+
 function newDice(x, y)
 
     return {
@@ -42,10 +51,16 @@ function processDice(dice)
 
     -- Hurt
 
-    dice.iFrames = dice.iFrames - dt
+    dice.iFrames = clamp(dice.iFrames - dt, 0, 1)
     for id, fire in ipairs(fires) do
 
-        
+        if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 128 and dice.iFrames == 0 then
+
+            dice.iFrames = 1
+
+            dice.hp = dice.hp - 1
+            
+        end
 
     end
 
@@ -113,12 +128,22 @@ function processDice(dice)
 
     end
 
+    if dice.hp == 0 then dice.dead = true; table.insert(particleSystems, newParticleSystem(dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), deepcopyTable(ITEM_DIE_PARTICLES))) end
+
 end
 
 function drawDice(dice)
 
     drawShadow(DICE_SHADOW_IMAGE, dice.pos.x, dice.pos.y, 1 - dice.bounceAnim, 1 + dice.bounceAnim)
+
+    setColor(255, 255, 255, 255 * (1 - math.abs(math.sin(dice.iFrames * 3.14 * 4))))
     
     drawFrame(DICE_IMAGE, (6 - dice.number) + 1, 1, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
+
+    if dice.hp ~= 5 and dice.hp ~= 0 then
+
+        drawSprite(CRACKED_IMAGES[5 - dice.hp], dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
+
+    end
 
 end
