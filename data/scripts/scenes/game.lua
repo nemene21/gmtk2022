@@ -22,6 +22,9 @@ function gameReload()
     TABLE_SPRITE = love.graphics.newImage("data/graphics/images/table.png")
 
     CHIP_SPRITE  = love.graphics.newImage("data/graphics/images/chip.png")
+
+    HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
+    handAnim = 0
     
 end
 
@@ -144,6 +147,10 @@ function game()
 
     processTextParticles()
     drawAllShadows()
+
+    handAnim = lerp(handAnim, 0, dt * 6)
+
+    drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM)
 
     -- Return scene
     return sceneAt

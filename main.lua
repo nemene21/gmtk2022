@@ -20,7 +20,7 @@ function love.load()
     require "init"
 
     -- Mouse
-    --love.mouse.setVisible(false)
+    love.mouse.setVisible(false)
     mouseMode = "pointer"
     mouse = {["pointer"] = love.graphics.newImage("data/graphics/images/mouse/pointer.png")}
     mouseOffset = {0,0}
