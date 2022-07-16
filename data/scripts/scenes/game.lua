@@ -26,6 +26,8 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
+    events = {"fire"}
+
     fires = {}
 
     eventTimer = 3
@@ -47,6 +49,21 @@ function game()
     -- Draw background
     drawSprite(TABLE_SPRITE, 400, 300)
 
+    eventTimer = eventTimer - dt
+    if eventTimer < 0 then                     -- Events
+
+        eventTimer = eventTimerMax
+
+        local event = events[love.math.random(1, #events)]
+
+        if event == "fire" then
+
+            table.insert(fires, newFire(love.math.random(64, 736), love.math.random(64, 536)))
+
+        end
+
+    end
+
     local kill = {}                                            -- Draw particles
     for id,P in ipairs(particleSystems) do
         P:process()
@@ -66,7 +83,8 @@ function game()
 
         item:process()
 
-        if item.dead then table.insert(kill, id) end
+        if item.dead then table.insert(kill, id)
+        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y > 624 then table.insert(kill, id) end end
 
     end items = wipeKill(kill, items)
 
