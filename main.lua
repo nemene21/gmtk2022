@@ -26,7 +26,7 @@ function love.load()
     mouseOffset = {0,0}
 
     -- Set default scene (the first one)
-    scene = "game"
+    scene = "menu"
     scenes[scene][2]()
 
     -- Set joysticks

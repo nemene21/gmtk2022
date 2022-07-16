@@ -17,7 +17,7 @@ diceDie = love.audio.newSource("data/sounds/SFX/diceDie.wav", "stream"),
 
 laser = love.audio.newSource("data/sounds/SFX/laser.wav", "stream"),
 
-earthquake = love.audio.newSource("data/sounds/SFX/laser.wav", "stream")
+earthquake = love.audio.newSource("data/sounds/SFX/earthquake.wav", "stream")
 
 }
 
@@ -35,6 +35,7 @@ MASTER_VOLUME = 1
 SFX_VOLUME = 2
 MUSIC_VOLUME = 1
 trackPitch = 1
+trackVolume = 1
 
 SOUNDS_NUM_PLAYING = {}
 for id,S in pairs(SOUNDS) do SOUNDS_NUM_PLAYING[id] = 0 end
@@ -49,32 +50,22 @@ trackTransitionMax = 0
 
 function playTrack(track, transition)
 
-    if track ~= TRACK_PLAYING then
-        NEW_TRACK = track
+    if MUSIC[TRACK_PLAYING] ~= nil then MUSIC[TRACK_PLAYING]:stop() end
 
-        trackTransition = transition or 0
-        trackTransitionMax = transition or 0
-    end
+    TRACK_PLAYING = track
 
-end
-
-function switchTracks()
-
-    local hold = TRACK_PLAYING
-
-    TRACK_PLAYING = NEW_TRACK
-    NEW_TRACK = hold
-    
 end
     
 function playSound(string, pitch, maxPlays, vol)
-
-    local pitch = pitch or 1
-    local NEW_SOUND = SOUNDS[string]:clone(); NEW_SOUND:setPitch(pitch); NEW_SOUND:setVolume((vol or 1) * MASTER_VOLUME * SFX_VOLUME); NEW_SOUND:play()
-    table.insert(SOUNDS_PLAYING,{NEW_SOUND, string})
-    SOUNDS_NUM_PLAYING[string] = SOUNDS_NUM_PLAYING[string] + 1
-
+    if (maxPlays or 12) > SOUNDS_NUM_PLAYING[string]  then
+        local pitch = pitch or 1
+        local NEW_SOUND = SOUNDS[string]:clone(); NEW_SOUND:setPitch(pitch); NEW_SOUND:setVolume((vol or 1) * MASTER_VOLUME * SFX_VOLUME); NEW_SOUND:play()
+        table.insert(SOUNDS_PLAYING,{NEW_SOUND, string})
+        SOUNDS_NUM_PLAYING[string] = SOUNDS_NUM_PLAYING[string] + 1
+    end
 end
+
+trackPitch = 0.8
 
 function processSound()
 
@@ -83,40 +74,8 @@ function processSound()
     end
 
     if MUSIC[TRACK_PLAYING] ~= nil then
-        MUSIC[TRACK_PLAYING]:setVolume(MUSIC_VOLUME * MASTER_VOLUME)
         
         if not MUSIC[TRACK_PLAYING]:isPlaying() then MUSIC[TRACK_PLAYING]:play() end
-    end
-
-    if MUSIC[NEW_TRACK] ~= nil then
-        MUSIC[NEW_TRACK]:setVolume(MUSIC_VOLUME * MASTER_VOLUME)
-        
-        if not MUSIC[NEW_TRACK]:isPlaying() then MUSIC[NEW_TRACK]:play() end
-    end
-    
-    trackTransition = math.max(trackTransition - (dt or 0), 0)
-    if trackTransition == 0 and NEW_TRACK ~= nil then
-
-        if MUSIC[TRACK_PLAYING] ~= nil then MUSIC[TRACK_PLAYING]:stop() end
-
-        TRACK_PLAYING = NEW_TRACK
-        NEW_TRACK = nil
-    end
-
-    if trackTransition > 0 then
-
-        if MUSIC[TRACK_PLAYING] ~= nil then
-        
-            MUSIC[TRACK_PLAYING]:setVolume(MUSIC[TRACK_PLAYING]:getVolume() * (trackTransition / trackTransitionMax))
-
-        end
-
-        if MUSIC[NEW_TRACK] ~= nil then
-        
-            MUSIC[NEW_TRACK]:setVolume(MUSIC[NEW_TRACK]:getVolume() * (1 - trackTransition / trackTransitionMax))
-        
-        end
-
     end
 
 end

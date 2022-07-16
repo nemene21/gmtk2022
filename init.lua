@@ -15,6 +15,7 @@ require "frameworkScripts.timer"
 require "frameworkScripts.camera"
 require "frameworkScripts.audio"
 require "frameworkScripts.text"
+require "frameworkScripts.buttons"
 
 -- Project Specific Modules
 require "data.scripts.shop"
@@ -26,12 +27,14 @@ require "data.scripts.fire"
 require "data.scripts.lasers"
 
 -- Scenes
-require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"
+require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"; require "data.scripts.scenes.menu"
 
 scenes = {
 
 blank  = {blank,blankReload,blankDie},
 
 game   = {game,gameReload,gameDie},
+
+menu   = {menu,menuReload,menuDie}
 
 }

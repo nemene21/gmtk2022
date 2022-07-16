@@ -26,11 +26,11 @@ function gameReload()
     HAND = newSpritesheet("data/graphics/images/hand.png", 16, 16)
     handAnim = 0
 
-    events = {"laser"}-- {"fire", "earthquake", "laser"}
+    events = {"fire", "earthquake", "laser"}
 
     fires = {}
 
-    eventTimer = 1
+    eventTimer = 20
     eventTimerMax = 30
 
     shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10)}
@@ -329,9 +329,6 @@ function game()
     
         if shopOpen then playTrack("shop", 0.5) end
         if not shopOpen then playTrack("gameplay", 0.5) end
-
-        print(TRACK_PLAYING)
-        print(NEW_TRACK)
     
     end
 
