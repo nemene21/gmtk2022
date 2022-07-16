@@ -18,7 +18,10 @@ function newWaterBalloon(x, y)
 
         bounceAnim = 0,
 
-        lastThrowSpeed = 0
+        lastThrowSpeed = 0,
+
+        goodThrow = 1600,
+        thrownGood = false
 
     }
 
@@ -48,7 +51,7 @@ function processWaterBalloon(balloon)
         balloon.fakeVertical = 0
         balloon.verticalVel  = 0
 
-        if balloon.lastThrowSpeed > 1400 then
+        if balloon.thrownGood then
 
             balloon.dead = true
 

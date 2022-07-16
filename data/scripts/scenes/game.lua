@@ -1,7 +1,7 @@
 
 function gameReload()
 
-    items = {newDice(400, 300), newWaterBalloon(400, 300)}
+    items = {newDice(300, 300), newWaterBalloon(500, 300)}
 
     itemTaken = nil
 
@@ -68,6 +68,8 @@ function game()
     -- Die grabbing
     if mouseJustPressed(1) then
 
+        handAnim = 0.6
+
         itemTakenWay  = 0
         itemTakenTime = 0
 
@@ -119,6 +121,20 @@ function game()
 
         table.insert(particleSystems, particles)
 
+        if itemTaken.goodThrow ~= nil then
+
+            if itemTaken.goodThrow < speed then
+
+                local messages = {"Awesome", "Great", "Exceptional"}
+
+                addNewText(messages[love.math.random(1, #messages)], xM, yM - 24, {0, 255, 0})
+
+                itemTaken.thrownGood = true
+
+            end
+
+        end
+
         itemTaken = nil
 
     end
@@ -148,9 +164,9 @@ function game()
     processTextParticles()
     drawAllShadows()
 
-    handAnim = lerp(handAnim, 0, dt * 6)
+    handAnim = lerp(handAnim, 0, dt * 12)
 
-    drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM)
+    drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM, 1 - handAnim, 1 - handAnim)
 
     -- Return scene
     return sceneAt

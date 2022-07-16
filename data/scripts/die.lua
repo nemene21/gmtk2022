@@ -26,7 +26,10 @@ function newDice(x, y)
 
         bounceAnim = 0,
 
-        lastThrowSpeed = 0
+        lastThrowSpeed = 0,
+
+        goodThrow = 2200,
+        thrownGood = false
 
     }
 
@@ -55,7 +58,7 @@ function processDice(dice)
 
         dice.fakeVertical = -1
 
-        if dice.verticalVel < 80 then -- Stop when too low
+        if dice.verticalVel < 100 then -- Stop when too low
             
             dice.verticalVel = 0
         
@@ -80,11 +83,15 @@ function processDice(dice)
 
                 dice.validForPoints = false
 
-                money = money + dice.number
+                money = money + dice.number * (boolToInt(dice.thrownGood) + 1)
 
                 moneyTextAnimation = 0.6
 
-                addNewText("+"..tostring(dice.number), dice.pos.x, dice.pos.y - 12, {0, 255, 155})
+                local text = "+"..tostring(dice.number)
+
+                if dice.thrownGood then text = text .. "x2" end
+
+                addNewText(text, dice.pos.x, dice.pos.y - 12, {0, 255, 155}, 2)
 
             end
 
