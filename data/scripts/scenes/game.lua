@@ -333,7 +333,7 @@ function game()
     processTextParticles()
     drawAllShadows()
 
-    if justPressed("space") then
+    if justPressed("space") and won == nil then
         
         shopOpen = not shopOpen
     
@@ -343,6 +343,8 @@ function game()
     end
 
     if shopOpen then
+
+        FIRE_SOUND:stop()
 
         shopOpenAnim = lerp(shopOpenAnim, 1, rawDt * 10)
 
@@ -386,6 +388,8 @@ function game()
         transition = endAnimation
 
         if endAnimation == 1 then sceneAt = "endScreen" end
+
+        FIRE_SOUND:stop()
 
     end
 

@@ -20,7 +20,7 @@ function newWaterBalloon(x, y)
 
         lastThrowSpeed = 0,
 
-        goodThrow = 1000,
+        goodThrow = 750,
         thrownGood = false,
 
         radius = 24

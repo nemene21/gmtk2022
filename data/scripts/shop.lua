@@ -25,10 +25,12 @@ function processSlot(slot)
 
         slot.slotAnimation = lerp(slot.slotAnimation, 1, rawDt * 8)
 
-        if mouseJustPressed(1) and money >= slot.price then
+        if mouseJustPressed(1) and money >= slot.price and won == nil then
 
             money = money - slot.price
             moneyTextAnimation = 0.6
+
+            slot.slotAnimation = 2
 
             grabbedFromShop = true
 
