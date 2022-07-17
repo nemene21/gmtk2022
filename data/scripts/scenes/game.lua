@@ -58,6 +58,8 @@ function gameReload()
 
     WIND_PARTICLES = newParticleSystem(850, 300, loadJson("data/graphics/particles/windParticles.json"))
 
+    windDirection = 1
+
 end
 
 function gameDie()
@@ -100,7 +102,7 @@ function game()
 
         local event = events[love.math.random(1, #events)]
 
-        event = "wind"
+        event = "laser"
 
         if event == "fire" then
 
@@ -117,9 +119,18 @@ function game()
         end
 
         if event == "laser" then
+            
+            if love.math.random(1, 100) > 50 then
 
-            table.insert(lasers, newLaser())
-            table.insert(lasers, newLaser(-96))
+                table.insert(lasers, newLaser(0, 1))
+                table.insert(lasers, newLaser(-96, 1))
+
+            else
+
+                table.insert(lasers, newLaser(160 + 800, -1))
+                table.insert(lasers, newLaser(160 + 800 + 96, -1))
+
+            end
 
             playSound("laser")
 
@@ -128,6 +139,22 @@ function game()
         if event == "wind" then
 
             windTimer = 10
+
+            windDirection = love.math.random(0, 1) * 2 - 1
+
+            if windDirection == 1 then
+
+                WIND_PARTICLES.x = 850
+
+                WIND_PARTICLES.rotation = 180
+
+            else
+
+                WIND_PARTICLES.x = -50
+
+                WIND_PARTICLES.rotation = 0
+
+            end
 
         end
 
@@ -159,7 +186,7 @@ function game()
 
         item:process()
 
-        item.pos.x = item.pos.x - windStrenght * 125 * dt
+        item.pos.x = item.pos.x - windStrenght * 125 * dt * windDirection
 
         item.gettingHitByLaser = false
 
@@ -302,7 +329,7 @@ function game()
         laser:process()
         laser:draw()
 
-        if laser.x > 880 then
+        if laser.x > 1200 or laser.x < -400 then
 
             table.insert(kill, id)
 

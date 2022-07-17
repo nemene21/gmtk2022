@@ -7,11 +7,13 @@ LASER_PARTICLES = loadJson("data/graphics/particles/laserParticles.json")
 
 LASER_SHOOTER_SPRITE = love.graphics.newImage("data/graphics/images/laserShooter.png")
 
-function newLaser(x)
+function newLaser(x, dir)
 
     return {
 
         x = - 80 + (x or 0), y = 32,
+
+        dir = dir,
 
         process = processLaser, draw = drawLaser,
 
@@ -45,7 +47,7 @@ function processLaser(laser)
 
     if laser.activeTimer < - 1.5 then laser.activeTimer = 1.5 end
 
-    laser.x = laser.x + dt * LASER_SPEED
+    laser.x = laser.x + dt * LASER_SPEED * laser.dir
 
     object, laser.endPoint = castRay(newVec(laser.x, laser.y - 100), newVec(laser.x, 600), items, laserGetPos, laserGetRadius)
 
