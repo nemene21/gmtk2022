@@ -35,7 +35,7 @@ function gameReload()
     eventTimer = 30
     eventTimerMax = 20
 
-    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8), newSlot(320, 520, newHealBot(), 0)}
+    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8), newSlot(320, 520, newHealBot(), 18)}
     shopOpen = false
     shopOpenAnim = 0
 
@@ -78,6 +78,10 @@ end
 
 function game()
 
+    for id, slot in ipairs(shopItems) do
+        slot.buyTimer = slot.buyTimer - rawDt
+    end
+
     if #fires > 0 then
 
         if not FIRE_SOUND:isPlaying() then
@@ -106,7 +110,7 @@ function game()
 
         eventTimer = eventTimerMax
 
-        eventTimerMax = eventTimerMax * 0.95
+        eventTimerMax = eventTimerMax * 0.92
 
         local event = events[love.math.random(1, #events)]
         

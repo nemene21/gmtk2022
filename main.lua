@@ -16,6 +16,8 @@ function love.load()
 
     love.window.setTitle(title.."                   [F1 for fullscreen]")
 
+    love.window.setIcon(love.image.newImageData("gameIcon.png"))
+
     -- Imports
     require "init"
 

@@ -25,8 +25,6 @@ end
 
 function processSlot(slot)
 
-    slot.buyTimer = slot.buyTimer - dt
-
     if xM > slot.x - 36 and xM < slot.x + 36 and yM > slot.y - 36 and yM < slot.y + 36 then
 
         slot.slotAnimation = lerp(slot.slotAnimation, 1, rawDt * 8)
