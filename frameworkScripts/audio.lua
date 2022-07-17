@@ -17,7 +17,14 @@ diceDie = love.audio.newSource("data/sounds/SFX/diceDie.wav", "stream"),
 
 laser = love.audio.newSource("data/sounds/SFX/laser.wav", "stream"),
 
-earthquake = love.audio.newSource("data/sounds/SFX/earthquake.wav", "stream")
+earthquake = love.audio.newSource("data/sounds/SFX/earthquake.wav", "stream"),
+
+loose = love.audio.newSource("data/sounds/SFX/loose.wav", "stream"),
+win = love.audio.newSource("data/sounds/SFX/win.mp3", "stream"),
+
+awesome = love.audio.newSource("data/sounds/SFX/voicelineAwesome.mp3", "stream"),
+great = love.audio.newSource("data/sounds/SFX/voicelineGreat.mp3", "stream"),
+exceptional = love.audio.newSource("data/sounds/SFX/voicelineExceptional.mp3", "stream")
 
 }
 
@@ -27,7 +34,9 @@ MUSIC = {
 
 gameplay = love.audio.newSource("data/sounds/music/gameplay.wav", "stream"),
 
-shop = love.audio.newSource("data/sounds/music/shop.wav", "stream")
+shop = love.audio.newSource("data/sounds/music/shop.wav", "stream"),
+
+menu = love.audio.newSource("data/sounds/music/menu.mp3", "stream")
 
 }
 

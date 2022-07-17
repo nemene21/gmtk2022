@@ -12,7 +12,9 @@ function menuReload()
     bgOffset = 0
 
     TITLE = love.graphics.newImage("data/graphics/images/title.png")
-    
+
+    playTrack("menu")
+
 end
 
 function menuDie()

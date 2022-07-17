@@ -1,7 +1,9 @@
 
 function gameReload()
 
-    items = {newDice(300, 300), newWaterBalloon(500, 300)}
+    radio = newRadio(300, 300)
+
+    items = {radio, newDice(500, 300)}
 
     itemTaken = nil
 
@@ -30,7 +32,7 @@ function gameReload()
 
     fires = {}
 
-    eventTimer = 5
+    eventTimer = 20
     eventTimerMax = 20
 
     shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8)}
@@ -59,6 +61,8 @@ function gameReload()
     WIND_PARTICLES = newParticleSystem(850, 300, loadJson("data/graphics/particles/windParticles.json"))
 
     windDirection = 1
+
+    itemDragDirection = 0
 
 end
 
@@ -101,9 +105,7 @@ function game()
         eventTimer = eventTimerMax
 
         local event = events[love.math.random(1, #events)]
-
-        event = "earthquake"
-
+        
         if event == "fire" then
 
             table.insert(fires, newFire(love.math.random(64, 736), love.math.random(64, 536)))
@@ -186,7 +188,7 @@ function game()
 
         item:process()
 
-        if item.isNail ~= nil and item.stabbed == true then item.pos.x = item.pos.x - windStrenght * 125 * dt * windDirection end
+        if not (item.isNail ~= nil and item.stabbed == true) and item ~= radio then item.pos.x = item.pos.x - windStrenght * 125 * dt * windDirection end
 
         item.gettingHitByLaser = false
 
@@ -231,6 +233,12 @@ function game()
 
                 playSound("pickUp", love.math.random(100, 120) * 0.01)
 
+                if itemTaken == radio then
+
+                    radio.directionChanges = 0
+
+                end
+
             end
 
         end
@@ -245,43 +253,56 @@ function game()
         itemTaken.vel.x = (itemTaken.pos.x - lastitemTakenPos.x) / dt
         itemTaken.vel.y = (itemTaken.pos.y - lastitemTakenPos.y) / dt
 
-        local speed = itemTaken.vel:getLen()
+        if itemTaken ~= radio then
 
-        itemTaken.lastThrowSpeed = speed
+            local speed = itemTaken.vel:getLen()
 
-        if speed < 300 then
+            itemTaken.lastThrowSpeed = speed
 
-            playSound("pickUp", love.math.random(60, 80) * 0.01)
+            if speed < 300 then
 
-        else
+                playSound("pickUp", love.math.random(60, 80) * 0.01)
 
-            playSound("throwItem", love.math.random(80, 120) * 0.01)
+            else
 
-        end
-
-        local particles = newParticleSystem(xM, yM, deepcopyTable(DICE_THROW_PARTICLES))
-
-        particles.rotation = itemTaken.vel:getRot()
-
-        particles.particleData.width.a = particles.particleData.width.a * speed / 1500
-        particles.particleData.width.b = particles.particleData.width.b * speed / 1500
-
-        particles.particleData.speed.a = speed * love.math.random(20, 120) * 0.002
-        particles.particleData.speed.b = speed * love.math.random(20, 120) * 0.002
-
-        table.insert(particleSystems, particles)
-
-        if itemTaken.goodThrow ~= nil then
-
-            if itemTaken.goodThrow < speed then
-
-                local messages = {"Awesome", "Great", "Exceptional"}
-
-                addNewText(messages[love.math.random(1, #messages)], xM, yM - 24, {0, 255, 0})
-
-                itemTaken.thrownGood = true
+                playSound("throwItem", love.math.random(80, 120) * 0.01)
 
             end
+
+            local particles = newParticleSystem(xM, yM, deepcopyTable(DICE_THROW_PARTICLES))
+
+            particles.rotation = itemTaken.vel:getRot()
+
+            particles.particleData.width.a = particles.particleData.width.a * speed / 1500
+            particles.particleData.width.b = particles.particleData.width.b * speed / 1500
+
+            particles.particleData.speed.a = speed * love.math.random(20, 120) * 0.002
+            particles.particleData.speed.b = speed * love.math.random(20, 120) * 0.002
+
+            table.insert(particleSystems, particles)
+
+            if itemTaken.goodThrow ~= nil then
+
+                if itemTaken.goodThrow < speed then
+
+                    local messages = {"Awesome", "Great", "Exceptional"}
+                    local sounds   = {"awesome", "great", "exceptional"}
+
+                    local message = love.math.random(1, #messages)
+
+                    playSound(sounds[message], love.math.random(90, 110) * 0.01)
+
+                    addNewText(messages[message], xM, yM - 24, {0, 255, 0})
+
+                    itemTaken.thrownGood = true
+
+                end
+
+            end
+        
+        else
+
+            playSound("pickUp", love.math.random(60, 80) * 0.01)
 
         end
 
@@ -291,12 +312,35 @@ function game()
 
     if itemTaken ~= nil then
 
+        lastItemTakenPos = lastItemTakenPos or newVec(0, 0)
+
+        itemDragDirection = newVec(lastItemTakenPos.x - itemTaken.pos.x, lastItemTakenPos.y - itemTaken.pos.y)
+        itemDragDirection:normalize()
+
+        itemDragDirection.x = round(itemDragDirection.x); itemDragDirection.y = round(itemDragDirection.y)
+
         itemTaken.fakeVertical = lerp(itemTaken.fakeVertical, -64, dt * 10)
 
         lastitemTakenPos = newVec(itemTaken.pos.x, itemTaken.pos.y)
 
-        itemTaken.pos.x = lerp(itemTaken.pos.x, xM, dt * 50)
-        itemTaken.pos.y = lerp(itemTaken.pos.y, yM, dt * 50)
+        itemTaken.pos.x = lerp(itemTaken.pos.x, xM, dt * 40)
+        itemTaken.pos.y = lerp(itemTaken.pos.y, yM, dt * 40)
+
+        if itemTaken == radio then
+
+            local newDragDirection = newVec(lastItemTakenPos.x - itemTaken.pos.x, lastItemTakenPos.y - itemTaken.pos.y)
+            newDragDirection:normalize()
+
+            newDragDirection.x = round(newDragDirection.x); newDragDirection.y = round(newDragDirection.y)
+
+            if newDragDirection.x ~= itemDragDirection.x or newDragDirection.y ~= itemDragDirection.y then
+
+                itemTaken.directionChanges = itemTaken.directionChanges + 1
+                print(radio.directionChanges)
+
+            end
+
+        end
 
         itemTaken.verticalVel = 0
 
@@ -452,7 +496,7 @@ function game()
 
     drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM, 1 - handAnim, 1 - handAnim)
 
-    if money > 250 then won = true end
+    if money >= 250 then won = true end
 
     if won ~= nil then
 

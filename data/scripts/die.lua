@@ -68,7 +68,7 @@ function processDice(dice)
     dice.iFrames = clamp(dice.iFrames - dt, 0, 1)
     for id, fire in ipairs(fires) do
 
-        if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 96 and dice.iFrames == 0 and fire.wet == false then
+        if newVec(fire.x - dice.pos.x, fire.y - dice.pos.y):getLen() < 96 and dice.iFrames == 0 and fire.wet == false and fire.animation > 0.95 then
 
             dice.iFrames = 0.25
 

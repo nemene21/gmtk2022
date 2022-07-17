@@ -9,14 +9,26 @@ function endScreenReload()
 
     bgOffset = 0
 
+    CONFETTI = newParticleSystem(400, -40, loadJson("data/graphics/particles/confetti.json"))
+
     text = ""
     if won then
 
         text = "You won, the debt is gone!"
 
+        playSound("win")
+
+        playTrack("NONE")
+
     else
 
         text = "You lost all your die..."
+
+        playSound("loose")
+
+        playTrack("NONE")
+
+        CONFETTI.spawning = false
 
     end
 
@@ -53,6 +65,8 @@ function endScreen()
     if mouseJustPressed(1) then handAnim = 0.6 end
 
     drawFrame(HAND, 1 + boolToInt(not mousePressed(1)), 1, xM, yM, 1 - handAnim, 1 - handAnim)
+
+    CONFETTI:process()
 
     -- Return scene
     return sceneAt

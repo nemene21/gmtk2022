@@ -61,6 +61,8 @@ function drawAllShadows()
 
     SHADOWS = {}
 
+    drawFrame(RADIO_IMAGE, 1, 1, radio.pos.x - 6, radio.pos.y + 6)
+
     setColor(255, 255, 255)
     love.graphics.setCanvas(display)
 

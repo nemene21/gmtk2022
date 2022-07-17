@@ -23,6 +23,7 @@ require "data.scripts.shop"
 require "data.scripts.die"
 require "data.scripts.waterBalloons"
 require "data.scripts.nail"
+require "data.scripts.radio"
 
 require "data.scripts.fire"
 require "data.scripts.lasers"
