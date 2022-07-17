@@ -30,10 +30,10 @@ function gameReload()
 
     fires = {}
 
-    eventTimer = 1
+    eventTimer = 5
     eventTimerMax = 20
 
-    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10)}
+    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8)}
     shopOpen = false
     shopOpenAnim = 0
 
@@ -102,7 +102,7 @@ function game()
 
         local event = events[love.math.random(1, #events)]
 
-        event = "laser"
+        event = "earthquake"
 
         if event == "fire" then
 
@@ -186,7 +186,7 @@ function game()
 
         item:process()
 
-        item.pos.x = item.pos.x - windStrenght * 125 * dt * windDirection
+        if item.isNail ~= nil and item.stabbed == true then item.pos.x = item.pos.x - windStrenght * 125 * dt * windDirection end
 
         item.gettingHitByLaser = false
 
@@ -342,8 +342,28 @@ function game()
     earthquakeTimer = earthquakeTimer - dt
 
     if earthquakeTimer < 0 and earthquakeShakes > 0 then
+
+        local hasNail = false
+
+        for id, item in ipairs(items) do
+
+            if item.isNail == true and item.stabbed == true then
+
+                item.hp = item.hp - 1
+
+                hasNail = true
+
+                table.insert(particleSystems, newParticleSystem(item.pos.x, item.pos.y, deepcopyTable(DICE_BOUNCE_PARTICLES)))
+
+                break
+
+            end
+
+        end
         
-        shake(8, 2, 0.15)
+        multiplier = 0.2 + 0.8 * boolToInt(not hasNail)
+
+        shake(8 * multiplier, 2, 0.15)
 
         playSound("earthquake", love.math.random(90, 110) * 0.01)
 
@@ -353,13 +373,13 @@ function game()
 
         for id, item in ipairs(items) do
 
-            local vel = newVec(love.math.random(200, 400))
+            local vel = newVec(love.math.random(200 * multiplier, 400 * multiplier))
 
             vel:rotate(love.math.random(0, 360))
 
             item.vel = vel
 
-            item.verticalVel = love.math.random(300, 400)
+            item.verticalVel = love.math.random(300 * multiplier, 400 * multiplier)
 
             if item.fakeVertical > -1 then item.fakeVertical = -1 end
 

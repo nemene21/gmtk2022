@@ -127,9 +127,15 @@ function castRay(startPoint, wantedEndPoint, objects, positionFunction, radiusFu
 
                 local objectPosition = positionFunction(object)
 
-                if newVec(objectPosition.x - point.x, objectPosition.y - point.y):getLen() < radiusFunction(object) then
-                    
-                    return object, point
+                local radius = radiusFunction(object)
+
+                if radius ~= nil then
+
+                    if newVec(objectPosition.x - point.x, objectPosition.y - point.y):getLen() < radius then
+                        
+                        return object, point
+
+                    end
 
                 end
     

@@ -37,7 +37,11 @@ end
 
 function laserGetRadius(item)
     
-    return item.radius + 12
+    local radius = item.radius
+
+    if radius ~= nil then radius = radius + 12 end
+
+    return radius
 
 end
 
