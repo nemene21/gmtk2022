@@ -64,6 +64,8 @@ function processNail(nail)
         if nail.thrownGood then nail.stabbed = true; nail.thrownGood = false
         
             table.insert(particleSystems, newParticleSystem(nail.pos.x, nail.pos.y, deepcopyTable(DICE_BOUNCE_PARTICLES)))
+
+            playSound("nailHit", love.math.random(80, 120) * 0.01)
         
         end
 

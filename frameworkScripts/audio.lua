@@ -24,7 +24,9 @@ win = love.audio.newSource("data/sounds/SFX/win.mp3", "stream"),
 
 awesome = love.audio.newSource("data/sounds/SFX/voicelineAwesome.mp3", "stream"),
 great = love.audio.newSource("data/sounds/SFX/voicelineGreat.mp3", "stream"),
-exceptional = love.audio.newSource("data/sounds/SFX/voicelineExceptional.mp3", "stream")
+exceptional = love.audio.newSource("data/sounds/SFX/voicelineExceptional.mp3", "stream"),
+
+nailHit = love.audio.newSource("data/sounds/SFX/nailHit.wav", "stream")
 
 }
 

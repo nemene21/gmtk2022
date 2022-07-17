@@ -11,7 +11,7 @@
 
 "spawnShape" : {
     "mode" : "even",
-    "data" : 8
+    "data" : 0
 },
 
 "particleData" : {

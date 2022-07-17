@@ -3,7 +3,7 @@ function gameReload()
 
     radio = newRadio(100, 300)
 
-    items = {radio, newDice(700, 300), newHealBot(700, 300)}
+    items = {radio, newDice(700, 300)}
 
     itemTaken = nil
 
@@ -35,7 +35,7 @@ function gameReload()
     eventTimer = 30
     eventTimerMax = 20
 
-    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8), newSlot(320, 520, newHealBot(), 15)}
+    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8), newSlot(320, 520, newHealBot(), 0)}
     shopOpen = false
     shopOpenAnim = 0
 
@@ -63,6 +63,8 @@ function gameReload()
     windDirection = 1
 
     itemDragDirection = 0
+
+    HEALER_DIE_PARTICLES = loadJson("data/graphics/particles/healerDie.json")
 
 end
 
@@ -198,7 +200,13 @@ function game()
         item.pos.y = item.pos.y or 100
 
         if item.dead then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01)
-        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y + item.fakeVertical > 624 then table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01) end end
+        else if item.pos.x < -24 or item.pos.x > 824 or item.pos.y < -24 or item.pos.y + item.fakeVertical > 624 then
+            
+            table.insert(kill, id); playSound("itemDestroyed", love.math.random(80, 120) * 0.01)
+            
+            if item.isHealer == true then table.insert(particleSystems, newParticleSystem(item.pos.x, item.pos.y, deepcopyTable(HEALER_DIE_PARTICLES))) end
+        
+        end end
 
     end items = wipeKill(kill, items)
 

@@ -103,7 +103,7 @@ function spawnParticleCircle(x,y,data,particleSystem,am,id)
 end
 
 function spawnParticleEven(x,y,data,particleSystem,am,id)
-    local particlePos = newVec(love.math.random(0,data),0)
+    local particlePos = newVec(data,0)
 
     -- Make a vel var out the speed (range from a to b)
     local newVel = newVec(love.math.random(particleSystem.particleData.speed.a, particleSystem.particleData.speed.b),0)

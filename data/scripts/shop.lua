@@ -5,6 +5,8 @@ function newSlot(x, y, item, price)
 
     item.pos.x = x; item.pos.y = y
 
+    item.inShop = true
+
     return {
 
         x = x, y = y, item = item,
@@ -31,6 +33,8 @@ function processSlot(slot)
 
         if mouseJustPressed(1) and money >= slot.price and won == nil and slot.buyTimer < 0 then
 
+            local item = deepcopyTable(slot.item)
+
             slot.buyTimer = 0.01
 
             money = money - slot.price
@@ -40,7 +44,9 @@ function processSlot(slot)
 
             grabbedFromShop = true
 
-            table.insert(items, deepcopyTable(slot.item))
+            item.inShop = false
+
+            table.insert(items, item)
 
             playSound("buy", love.math.random(80, 120) * 0.01)
 
