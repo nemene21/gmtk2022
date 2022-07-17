@@ -64,7 +64,7 @@ function processRadio(radio)
 
     end
 
-    if radio.directionChanges >= 4 and not radio.voiceLines[radio.voiceLineOn]:isPlaying() then
+    if radio.directionChanges >= 4 and not radio.voiceLines[(radio.voiceLineOn - 1 + boolToInt(radio.voiceLineOn == 1))]:isPlaying() then
 
         radio.directionChanges = 0
 
