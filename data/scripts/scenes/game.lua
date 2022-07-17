@@ -1,9 +1,9 @@
 
 function gameReload()
 
-    radio = newRadio(300, 300)
+    radio = newRadio(100, 300)
 
-    items = {radio, newDice(500, 300)}
+    items = {radio, newDice(700, 300), newHealBot(700, 300)}
 
     itemTaken = nil
 
@@ -32,10 +32,10 @@ function gameReload()
 
     fires = {}
 
-    eventTimer = 20
+    eventTimer = 30
     eventTimerMax = 20
 
-    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8)}
+    shopItems = {newSlot(80, 520, newDice(), 10), newSlot(160, 520, newWaterBalloon(), 10), newSlot(240, 520, newNail(), 8), newSlot(320, 520, newHealBot(), 15)}
     shopOpen = false
     shopOpenAnim = 0
 
@@ -103,6 +103,8 @@ function game()
     if eventTimer < 0 then                     -- Events
 
         eventTimer = eventTimerMax
+
+        eventTimerMax = eventTimerMax * 0.95
 
         local event = events[love.math.random(1, #events)]
         
@@ -336,7 +338,6 @@ function game()
             if newDragDirection.x ~= itemDragDirection.x or newDragDirection.y ~= itemDragDirection.y then
 
                 itemTaken.directionChanges = itemTaken.directionChanges + 1
-                print(radio.directionChanges)
 
             end
 
@@ -498,7 +499,7 @@ function game()
 
     if money >= 250 then won = true end
 
-    if won ~= nil then
+    if won ~= nil and not radio.playing then
 
         endAnimation = clamp(endAnimation + dt, 0, 1)
         transition = endAnimation

@@ -45,7 +45,9 @@ function newDice(x, y)
 
         radius = 24,
 
-        isDice = true
+        isDice = true,
+
+        healAnim = 0,
 
     }
 
@@ -83,6 +85,8 @@ function processDice(dice)
     -- Animation
 
     dice.bounceAnim = lerp(dice.bounceAnim, 0, dt * 14)
+
+    dice.healAnim = lerp(dice.healAnim, 0, dt * 14)
 
     -- Move
     dice.vel.x = lerp(dice.vel.x, 0, dt * boolToInt(not dice.held) * 3)
@@ -154,10 +158,12 @@ function drawDice(dice)
 
     drawShadow(DICE_SHADOW_IMAGE, dice.pos.x, dice.pos.y, 1 - dice.bounceAnim, 1 + dice.bounceAnim)
 
-    setColor(255, 255, 255, 255 * (1 - math.abs(math.sin(dice.iFrames * 3.14 * 4))))
+    setColor(255 * (1 - dice.healAnim), 255, 255 * (1 - dice.healAnim), 255 * (1 - math.abs(math.sin(dice.iFrames * 3.14 * 4))))
     
+    love.graphics.setShader(SHADERS.FLASH)
     drawFrame(DICE_IMAGE, (6 - dice.number) + 1, 1, dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)
-
+    love.graphics.setShader()
+    
     if dice.hp ~= 5 and dice.hp ~= 0 then
 
         drawSprite(CRACKED_IMAGES[5 - dice.hp], dice.pos.x, dice.pos.y + math.floor(dice.fakeVertical), 1 - dice.bounceAnim, 1 + dice.bounceAnim)

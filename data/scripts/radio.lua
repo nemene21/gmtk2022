@@ -1,5 +1,5 @@
 
-RADIO_IMAGE = newSpritesheet("data/graphics/images/radiosheet.png", 26, 18)
+RADIO_IMAGE = newSpritesheet("data/graphics/images/radioSheet.png", 26, 18)
 
 function newRadio(x, y)
 
@@ -16,18 +16,21 @@ function newRadio(x, y)
 
         held = false,
 
-        lastThrowSpeed = 0,
+        playing = false,
 
-        radius = 48,
+        lastThrowSpeed = 0,
 
         voiceLineOn = 1,
 
-        directionChanges = 0,
+        directionChanges = 999,
+
+        animation = 0,
 
         voiceLines = {
             
             love.audio.newSource("data/sounds/SFX/radio/hello.wav", "stream"),
             love.audio.newSource("data/sounds/SFX/radio/pickle.wav", "stream"),
+            love.audio.newSource("data/sounds/SFX/radio/differently.wav", "stream"),
             love.audio.newSource("data/sounds/SFX/radio/annoyances.wav", "stream"),
             love.audio.newSource("data/sounds/SFX/radio/noBattery.wav", "stream"),
             love.audio.newSource("data/sounds/SFX/radio/never.mp3", "stream")
@@ -39,6 +42,13 @@ function newRadio(x, y)
 end
 
 function processRadio(radio)
+
+    radio.playing = false
+    for id, vl in ipairs(radio.voiceLines) do
+
+        if vl:isPlaying() then radio.playing = true end
+
+    end
 
     -- Move
 
@@ -64,7 +74,7 @@ function processRadio(radio)
 
     end
 
-    if radio.directionChanges >= 4 and not radio.voiceLines[(radio.voiceLineOn - 1 + boolToInt(radio.voiceLineOn == 1))]:isPlaying() then
+    if radio.directionChanges >= 4 and not radio.voiceLines[(radio.voiceLineOn - 1 + boolToInt(radio.voiceLineOn == 1))]:isPlaying() and won == nil then
 
         radio.directionChanges = 0
 
@@ -75,11 +85,23 @@ function processRadio(radio)
         if radio.voiceLineOn > #radio.voiceLines then radio.voiceLineOn = radio.voiceLineOn - 1 end
     end
 
+    if radio.animation ~= 0 or radio.playing then
+
+        radio.animation = radio.animation + dt * 2
+
+        radio.directionChanges = 0
+
+        radio.playing = true
+
+    end
+
+    if radio.animation > 1 then radio.animation = 0 end
+
 end
 
 function drawRadio(radio)
 
-    drawFrame(RADIO_IMAGE, 1, 1, radio.pos.x, radio.pos.y + math.floor(radio.fakeVertical))
+    drawFrame(RADIO_IMAGE, 1 + math.ceil(7 * radio.animation), 1, radio.pos.x, radio.pos.y + math.floor(radio.fakeVertical))
 
     setColor(255, 255, 255)
 

@@ -13,7 +13,9 @@ function newSlot(x, y, item, price)
 
         price = price,
 
-        slotAnimation = 0
+        slotAnimation = 0,
+
+        buyTimer = 0
 
     }
 
@@ -21,11 +23,15 @@ end
 
 function processSlot(slot)
 
+    slot.buyTimer = slot.buyTimer - dt
+
     if xM > slot.x - 36 and xM < slot.x + 36 and yM > slot.y - 36 and yM < slot.y + 36 then
 
         slot.slotAnimation = lerp(slot.slotAnimation, 1, rawDt * 8)
 
-        if mouseJustPressed(1) and money >= slot.price and won == nil then
+        if mouseJustPressed(1) and money >= slot.price and won == nil and slot.buyTimer < 0 then
+
+            slot.buyTimer = 0.01
 
             money = money - slot.price
             moneyTextAnimation = 0.6
