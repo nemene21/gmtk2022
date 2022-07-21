@@ -31,6 +31,7 @@ nailHit = love.audio.newSource("data/sounds/SFX/nailHit.wav", "stream")
 }
 
 FIRE_SOUND = love.audio.newSource("data/sounds/SFX/fire.wav", "stream")
+WIND_SOUND = love.audio.newSource("data/sounds/SFX/wind.wav", "stream")
 
 MUSIC = {
 

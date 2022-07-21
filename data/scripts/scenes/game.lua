@@ -166,6 +166,8 @@ function game()
 
             end
 
+            WIND_SOUND:play()
+
         end
 
     end
@@ -519,6 +521,7 @@ function game()
         if endAnimation == 1 then sceneAt = "endScreen" end
 
         FIRE_SOUND:stop()
+        WIND_SOUND:stop()
 
     end
 
